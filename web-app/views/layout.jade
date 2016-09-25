@@ -1,0 +1,28 @@
+doctype html
+html
+	head
+		title= title
+		link(rel='stylesheet', href='/stylesheets/main.css')
+	body.index
+		#page-wrapper
+			header#header.alt
+				h1#logo
+					a(href="http://sebastienrichoz.github.io") Back to Landing Page
+				nav#nav
+					ul
+						li.current
+							a(href="/") Home
+		
+		section#banner
+			block content
+
+		footer#footer
+			ul.icons
+				li
+					a(href="https://github.com/damienrochat/TWEB-App-01", class="icon circle fa-github")
+						span.label Github
+			ul.copyright
+				li
+					&copy; Damien Rochat & Sébastien Richoz - 2016
+				li.
+					Design from	<a href="http://html5up.net"> HTML5 UP</a>
