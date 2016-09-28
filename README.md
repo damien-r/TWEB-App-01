@@ -9,4 +9,4 @@
 - Browse at `localhost:4000`
 
 ## Check the app on the web
-Open [https://hidden-wave-69922.herokuapp.com/](https://hidden-wave-69922.herokuapp.com/)
+Open [https://hidden-wave-69922.herokuapp.com/](https://hidden-wave-69922.herokuapp.com/) (not working yet...)
