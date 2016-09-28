@@ -10,7 +10,7 @@
   "scripts": {
     "start": "grunt",
     "test": "karma start karma.conf.js",
-    "postinstall": "bower install --config.interactive=false && grunt dev"
+    "postinstall": "bower install --config.interactive=false"
   },
   "dependencies": {
     "async": "~0.9.0",
