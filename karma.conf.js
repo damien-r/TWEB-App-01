@@ -1,86 +1,91 @@
-'use strict';
-
 // Karma configuration
-module.exports = function (config) {
-	config.set({
-		// Frameworks to use
-		frameworks: ['jasmine'],
+// http://karma-runner.github.io/0.13/config/configuration-file.html
+/*eslint-env node*/
 
-		// List of files / patterns to load in the browser
-		files: [
-			'bower_components/jquery/dist/jquery.js',
-			'bower_components/es5-shim/es5-shim.js',
-			'bower_components/json3/lib/json3.min.js',
-			'bower_components/bootstrap/dist/js/bootstrap.js',
-			'bower_components/angular/angular.js',
-			'bower_components/angular-aria/angular-aria.js',
-			'bower_components/angular-resource/angular-resource.js',
-			'bower_components/angular-mocks/angular-mocks.js',
-			'bower_components/angular-cookies/angular-cookies.js',
-			'bower_components/angular-sanitize/angular-sanitize.js',
-			'bower_components/angular-animate/angular-animate.js',
-			'bower_components/angular-ui-router/release/angular-ui-router.js',
-			'bower_components/angular-aria/angular-aria.js',
-			'app/app.js',
-			'app/modules/home/homeModule.js',
-			'app/modules/home/homeCtrl.js',
-			'app/modules/home/homeRoute.js',
-			'app/modules/home/homeService.js',
-			'app/modules/home/home-test.js',
-			'app/modules/explorer/explorerModule.js',
-			'app/modules/explorer/explorerCtrl.js',
-			'app/modules/explorer/explorerRoute.js',
-			'app/modules/explorer/explorerService.js',
-			'app/modules/explorer/explorer-test.js',
-			'app/modules/statistics/statisticsModule.js',
-			'app/modules/statistics/statisticsCtrl.js',
-			'app/modules/statistics/statisticsRoute.js',
-			'app/modules/statistics/statisticsService.js',
-			'app/modules/statistics/statistics-test.js',
-		],
+import makeWebpackConfig from './webpack.make';
 
-		// Test results reporter to use
-		// Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-		//reporters: ['progress'],
-		reporters: ['spec'],
+module.exports = function(config) {
+  config.set({
+    // base path, that will be used to resolve files and exclude
+    basePath: '',
 
-		plugins : [
-			'karma-jasmine',
-			'karma-coverage',
-			'karma-chrome-launcher',
-			'karma-firefox-launcher',
-			'karma-phantomjs-launcher',
-			'karma-spec-reporter'
-		],
+    // testing framework to use (jasmine/mocha/qunit/...)
+    frameworks: ['jasmine'],
 
-		// Web server port
-		port: 9876,
+    // list of files / patterns to load in the browser
+    files: ['spec.js'],
 
-		// Enable / disable colors in the output (reporters and logs)
-		colors: true,
+    preprocessors: {
+      'spec.js': ['webpack']
+    },
 
-		// Level of logging
-		// Possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-		logLevel: config.LOG_INFO,
+    webpack: makeWebpackConfig({ TEST: true }),
 
-		// Enable / disable watching file and executing tests whenever any file changes
-		autoWatch: true,
+    webpackMiddleware: {
+      // webpack-dev-middleware configuration
+      // i. e.
+      noInfo: true
+    },
 
-		// Start these browsers, currently available:
-		// - Chrome
-		// - ChromeCanary
-		// - Firefox
-		// - Opera
-		// - Safari (only Mac)
-		// - PhantomJS
-		// - IE (only Windows)
-		browsers: ['PhantomJS'],
+    coverageReporter: {
+      reporters: [{
+        type: 'html', //produces a html document after code is run
+        subdir: 'client'
+      }, {
+        type: 'json',
+        subdir: '.',
+        file: 'client-coverage.json'
+      }],
+      dir: 'coverage/' //path to created html doc
+    },
 
-		// If browser does not capture in given timeout [ms], kill it
-		captureTimeout: 60000,
+    plugins: [
+      require('karma-chrome-launcher'),
+      require('karma-coverage'),
+      require('karma-firefox-launcher'),
 
-		// Continuous Integration mode
-		// If true, it capture browsers, run tests and exit
-		singleRun: true
-	});
+      require('karma-jasmine'),
+      require('karma-spec-reporter'),
+      require('karma-phantomjs-launcher'),
+      require('karma-script-launcher'),
+      require('karma-webpack'),
+      require('karma-sourcemap-loader')
+    ],
+
+    // list of files / patterns to exclude
+    exclude: [],
+
+    // web server port
+    port: 9000,
+
+    // level of logging
+    // possible values: LOG_DISABLE || LOG_ERROR || LOG_WARN || LOG_INFO || LOG_DEBUG
+    logLevel: config.LOG_INFO,
+
+    // reporter types:
+    // - dots
+    // - progress (default)
+    // - spec (karma-spec-reporter)
+    // - junit
+    // - growl
+    // - coverage
+    reporters: ['spec', 'coverage'],
+
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: false,
+
+    // Start these browsers, currently available:
+    // - Chrome
+    // - ChromeCanary
+    // - Firefox
+    // - Opera
+    // - Safari (only Mac)
+    // - PhantomJS
+    // - IE (only Windows)
+    browsers: ['PhantomJS'],
+
+    // Continuous Integration mode
+    // if true, it capture browsers, run tests and exit
+    singleRun: false
+  });
 };

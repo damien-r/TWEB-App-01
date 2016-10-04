@@ -1,0 +1,13 @@
+<header id="header">
+  <h1 id="logo"><a href="index.html">cours'get <span>TEAM</span></a></h1>
+  <nav uib-collapse="$ctrl.isCollapsed" id="nav">
+    <ul>
+      <li ng-repeat="item in $ctrl.menu" ui-sref-active="active">
+        <a ui-sref="{{item.state}}">{{item.title}}</a>
+      </li>
+      <li><a href="https://damienrochat.github.io/TWEB-App-01/">About</a></li>
+
+      <!--<li><a href="#" class="button special">Sign Up</a></li>-->
+    </ul>
+  </nav>
+</header>
