@@ -8,10 +8,10 @@
     "angularMaterial": true,
     "modules": [
       {
-        "name": "statistics"
+        "name": "explorer"
       },
       {
-        "name": "explorer"
+        "name": "statistics"
       },
       {
         "name": "home"
@@ -19,12 +19,12 @@
     ],
     "menu": [
       {
-        "link": "statistics",
-        "title": "Statistics"
-      },
-      {
         "link": "explorer",
         "title": "Explorer"
+      },
+      {
+        "link": "statistics",
+        "title": "Statistics"
       },
       {
         "link": "home",

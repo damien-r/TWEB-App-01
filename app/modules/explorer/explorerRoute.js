@@ -9,15 +9,15 @@
  */
 
 angular.module('explorer')
-	.config(['$stateProvider', function ($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
+        
+        $stateProvider
+            .state('explorer', {
+                url:'/explorer',
+                templateUrl: 'app/modules/explorer/explorer.html',
+                controller: 'ExplorerCtrl',
+                controllerAs: 'vm'
+            });
 
-		$stateProvider
-			.state('explorer', {
-				url:'/explorer',
-				templateUrl: 'app/modules/explorer/explorer.html',
-				controller: 'ExplorerCtrl',
-				controllerAs: 'vm'
-			});
-
-
-	}]);
+        
+    }]);

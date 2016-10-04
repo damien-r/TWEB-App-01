@@ -1,14 +1,14 @@
 (function () {
-	'use strict';
+    'use strict';
 
-	/**
-	 * @ngdoc function
-	 * @name app.module:statisticsModule
-	 * @description
-	 * # statisticsModule
-	 * Module of the app
-	 */
+    /**
+     * @ngdoc function
+     * @name app.module:statisticsModule
+     * @description
+     * # statisticsModule
+     * Module of the app
+     */
 
-  	angular.module('statistics', ['chart.js']);
+    angular.module('statistics', ['chart.js']);
 
 })();

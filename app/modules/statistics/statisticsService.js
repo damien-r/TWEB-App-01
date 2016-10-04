@@ -1,24 +1,24 @@
 (function() {
-	'use strict';
+    'use strict';
 
-	/**
-	 * @ngdoc function
-	 * @name app.service:statisticsService
-	 * @description
-	 * # statisticsService
-	 * Service of the app
-	 */
+    /**
+     * @ngdoc function
+     * @name app.service:statisticsService
+     * @description
+     * # statisticsService
+     * Service of the app
+     */
 
-  	angular
-		.module('statistics')
-		.factory('StatisticsService', Statistics);
-		// Inject your dependencies as .$inject = ['$http', 'someSevide'];
-		// function Name ($http, someSevide) {...}
+    angular
+        .module('statistics')
+        .factory('StatisticsService', Statistics);
+        // Inject your dependencies as .$inject = ['$http', 'someSevide'];
+        // function Name ($http, someSevide) {...}
 
-		Statistics.$inject = ['$http'];
+        Statistics.$inject = ['$http'];
 
-		function Statistics ($http) {
+        function Statistics ($http) {
 
-		}
+        }
 
 })();

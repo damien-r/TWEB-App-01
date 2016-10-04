@@ -54,7 +54,9 @@ module.exports = function (grunt) {
 				src: [
 					// Angular Project Dependencies,
 					'app/assets/libs/angular/angular.js',
-					'app/assets/libs/**/*.js'
+					'app/assets/libs/chart.js/Chart.js', // Hack to include chart.js before angulare-chart.js
+					'app/assets/libs/**/*.js',
+					'!app/assets/libs/*.*' // Hack to exclude folder containing a dot (like Chart.js and angular-chart.js)
 
 				],
 				dest: 'app/assets/js/<%= pkg.name %>-angularbundle.js'
@@ -101,7 +103,7 @@ module.exports = function (grunt) {
 
 		watch: {
 			app: {
-				files: ['app/**/*'],
+				files: 'app/**/*',
 				tasks: ['jshint:app'],
 				options: {
 					livereload: true
@@ -165,11 +167,11 @@ module.exports = function (grunt) {
 		"concat",
 		"ngtemplates",
 		"injector:production",
-		"concurrent",
+		//"concurrent",
 		"clean"
 	]);
 
 	// Development task(s).
 	grunt.registerTask('dev', ['injector:dev', 'concurrent']);
-
+	
 };

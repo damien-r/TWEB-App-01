@@ -1,42 +1,42 @@
 (function () {
-	'use strict';
+    'use strict';
 
-	/**
-	 * @ngdoc configuration file
-	 * @name app.config:config
-	 * @description
-	 * # Config and run block
-	 * Configutation of the app
-	 */
-
-
-	angular
-		.module('github-explorer')
-		.config(configure)
-		.run(runBlock);
-
-	configure.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
-
-	function configure($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
-
-		$locationProvider.hashPrefix('!');
-
-		// This is required for Browser Sync to work poperly
-		$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+    /**
+     * @ngdoc configuration file
+     * @name app.config:config
+     * @description
+     * # Config and run block
+     * Configutation of the app
+     */
 
 
-		$urlRouterProvider
-			.otherwise('/home');
+    angular
+        .module('github-explorer')
+        .config(configure)
+        .run(runBlock);
 
-	}
+    configure.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
 
-	runBlock.$inject = ['$rootScope'];
+    function configure($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
 
-	function runBlock($rootScope) {
-		'use strict';
+        $locationProvider.hashPrefix('!');
 
-		console.log('AngularJS run() function...');
-	}
+        // This is required for Browser Sync to work poperly
+        $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+        
+        $urlRouterProvider
+            .otherwise('/');
+        
+    }
+
+    runBlock.$inject = ['$rootScope'];
+
+    function runBlock($rootScope) {
+        'use strict';
+
+        console.log('AngularJS run() function...');
+    }
 
 
 })();

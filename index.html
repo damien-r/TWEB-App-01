@@ -1,184 +1,160 @@
 <!DOCTYPE HTML>
 <!--
-	Twenty by HTML5 UP
-	html5up.net | @ajlkn
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+    Twenty by HTML5 UP
+    html5up.net | @ajlkn
+    Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html ng-app="github-explorer">
-	<head>
-		<title>GitHub Explorer</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-	</head>
-	<body class="no-sidebar">
-		<div id="page-wrapper">
+    <head>
+        <title>GitHub Explorer</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-			<!-- Header -->
-				<header id="header">
-					<h1 id="logo"><a href="index.html">cours'get <span>TEAM</span></a></h1>
-					<nav id="nav">
-						<ul>
-							<li><a ui-sref="home">Home</a></li>
-							<li><a ui-sref="statistics">Statistics</a></li>
-							<li><a ui-sref="explorer">Explorer</a></li>
-							<li><a href="https://damienrochat.github.io/TWEB-App-01/">About</a></li>
+        <!-- Theme's styles -->
+        <!--[if lte IE 8]><script src="/app/assets/theme/js/ie/html5shiv.js"></script><![endif]-->
+        <link rel="stylesheet" href="/app/assets/theme/css/main.css" />
+        <!--[if lte IE 8]><link rel="stylesheet" href="/app/assets/theme/css/ie8.css" /><![endif]-->
+        <!--[if lte IE 9]><link rel="stylesheet" href="/app/assets/theme/css/ie9.css" /><![endif]-->
 
-							<!--<li><a href="#" class="button special">Sign Up</a></li>-->
-						</ul>
-					</nav>
-				</header>
+    </head>
+    <body class="no-sidebar">
+        <div id="page-wrapper">
 
-			<!-- Main -->
-				<article id="main">
-					<!-- Include sub-views with UI router -->
-					<div ui-view></div>
-					<!-- End -->
+            <!-- Header -->
+            <header id="header">
+                <h1 id="logo"><a href="index.html"><span>Les</span> Cours'get</a></h1>
+                <nav id="nav">
+                    <ul>
+                        <li><a ui-sref="home">Home</a></li>
+                        <li><a ui-sref="statistics">Statistics</a></li>
+                        <li><a ui-sref="explorer">Explorer</a></li>
+                        <li><a href="https://damienrochat.github.io/TWEB-App-01/">About</a></li>
 
-					<!--
-					<header class="special container">
-						<span class="icon fa-mobile"></span>
-						<h2>And finally there's <strong>No Sidebar</strong></h2>
-						<p>Where that in the center faces the nameless horrors alone.</p>
-					</header>
-					-->
+                        <!--<li><a href="#" class="button special">Sign Up</a></li>-->
+                    </ul>
+                </nav>
+            </header>
 
-					<!-- One -->
-					<!--
-						<section class="wrapper style4 container">
-								<div class="content">
-									<section>
+            <!-- Main -->
+            <article id="main">
+                <!-- Include sub-views with UI router -->
+                <div ui-view></div>
+                <!-- End -->
 
-										<a href="#" class="image featured"><img src="images/pic04.jpg" alt="" /></a>
-										<header>
-											<h3>Dolore Amet Consequat</h3>
-										</header>
-										<p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum massa. Morbi eu faucibus massa. Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam.</p>
-										<p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique. Sed id sem et massa ornare pellentesque. Maecenas pharetra porta accumsan. </p>
-										<p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus, non hendrerit ipsum arcu tristique est.</p>
+                <!--
+                <header class="special container">
+                    <span class="icon fa-mobile"></span>
+                    <h2>And finally there's <strong>No Sidebar</strong></h2>
+                    <p>Where that in the center faces the nameless horrors alone.</p>
+                </header>
+                -->
 
-									</section>
-								</div>
+                <!-- One -->
+                <!--
+                <section class="wrapper style4 container">
+                        <div class="content">
+                            <section>
 
-						</section>
-					-->
-					<!-- Two -->
-					<!--
-						<section class="wrapper style1 container special">
-							<div class="row">
-								<div class="4u 12u(narrower)">
+                                <a href="#" class="image featured"><img src="images/pic04.jpg" alt="" /></a>
+                                <header>
+                                    <h3>Dolore Amet Consequat</h3>
+                                </header>
+                                <p>Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum massa. Morbi eu faucibus massa. Aliquam massa urna, imperdiet sit amet mi non, bibendum euismod est. Curabitur mi justo, tincidunt vel eros ullamcorper, porta cursus justo. Cras vel neque eros. Vestibulum diam.</p>
+                                <p>Vestibulum diam quam, mollis at consectetur non, malesuada quis augue. Morbi tincidunt pretium interdum. Morbi mattis elementum orci, nec dictum porta cursus justo. Quisque ultricies lorem in ligula condimentum, et egestas turpis sagittis. Cras ac nunc urna. Nullam eget lobortis purus. Phasellus vitae tortor non est placerat tristique. Sed id sem et massa ornare pellentesque. Maecenas pharetra porta accumsan. </p>
+                                <p>In vestibulum massa quis arcu lobortis tempus. Nam pretium arcu in odio vulputate luctus. Suspendisse euismod lorem eget lacinia fringilla. Sed sed felis justo. Nunc sodales elit in laoreet aliquam. Nam gravida, nisl sit amet iaculis porttitor, risus nisi rutrum metus, non hendrerit ipsum arcu tristique est.</p>
 
-									<section>
-										<header>
-											<h3>This is Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-										<footer>
-											<ul class="buttons">
-												<li><a href="#" class="button small">Learn More</a></li>
-											</ul>
-										</footer>
-									</section>
+                            </section>
+                        </div>
 
-								</div>
-								<div class="4u 12u(narrower)">
+                </section>
+                -->
 
-									<section>
-										<header>
-											<h3>Also Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-										<footer>
-											<ul class="buttons">
-												<li><a href="#" class="button small">Learn More</a></li>
-											</ul>
-										</footer>
-									</section>
+                <!-- Two -->
+                <!--
+                <section class="wrapper style1 container special">
+                    <div class="row">
+                        <div class="4u 12u(narrower)">
 
-								</div>
-								<div class="4u 12u(narrower)">
+                            <section>
+                                <header>
+                                    <h3>This is Something</h3>
+                                </header>
+                                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
+                                <footer>
+                                    <ul class="buttons">
+                                        <li><a href="#" class="button small">Learn More</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
 
-									<section>
-										<header>
-											<h3>Probably Something</h3>
-										</header>
-										<p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
-										<footer>
-											<ul class="buttons">
-												<li><a href="#" class="button small">Learn More</a></li>
-											</ul>
-										</footer>
-									</section>
+                        </div>
+                        <div class="4u 12u(narrower)">
 
-								</div>
-							</div>
-						</section>
-					-->
-				</article>
+                            <section>
+                                <header>
+                                    <h3>Also Something</h3>
+                                </header>
+                                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
+                                <footer>
+                                    <ul class="buttons">
+                                        <li><a href="#" class="button small">Learn More</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
 
-			<!-- Footer -->
-				<footer id="footer">
+                        </div>
+                        <div class="4u 12u(narrower)">
 
-					<ul class="icons">
-						<li><a href="#" class="icon circle fa-github"><span class="label">Github</span></a></li>
-					</ul>
+                            <section>
+                                <header>
+                                    <h3>Probably Something</h3>
+                                </header>
+                                <p>Sed tristique purus vitae volutpat ultrices. Aliquam eu elit eget arcu commodo suscipit dolor nec nibh. Proin a ullamcorper elit, et sagittis turpis. Integer ut fermentum.</p>
+                                <footer>
+                                    <ul class="buttons">
+                                        <li><a href="#" class="button small">Learn More</a></li>
+                                    </ul>
+                                </footer>
+                            </section>
 
-					<ul class="copyright">
-						<li>&copy; Les cours'get - HEIG-VD</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-					</ul>
+                        </div>
+                    </div>
+                </section>
+                -->
+            </article>
 
-				</footer>
+            <!-- Footer -->
+            <footer id="footer">
 
-		</div>
+                <ul class="icons">
+                    <li><a href="https://github.com/damienrochat/TWEB-App-01" class="icon circle fa-github" target="_blank"><span class="label">Github</span></a></li>
+                </ul>
 
-		<!-- injector:js -->
-		<script src="/src/bower_components/jquery/dist/jquery.js"></script>
-		<script src="/src/bower_components/es5-shim/es5-shim.js"></script>
-		<script src="/src/bower_components/json3/lib/json3.min.js"></script>
-		<script src="/src/bower_components/bootstrap/dist/js/bootstrap.js"></script>
-		<script src="/src/bower_components/angular/angular.js"></script>
-		<script src="/src/bower_components/angular-touch/angular-touch.js"></script>
-		<script src="/src/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-		<script src="/src/bower_components/angular-aria/angular-aria.js"></script>
-		<script src="/src/bower_components/angular-mocks/angular-mocks.js"></script>
-		<script src="/src/bower_components/angular-cookies/angular-cookies.js"></script>
-		<script src="/src/bower_components/angular-animate/angular-animate.js"></script>
-		<script src="/src/bower_components/angular-sanitize/angular-sanitize.js"></script>
-		<script src="/src/bower_components/angular-resource/angular-resource.js"></script>
-		<script src="/src/bower_components/angular-material-icons/angular-material-icons.min.js"></script>
-		<script src="/src/bower_components/angular-messages/angular-messages.js"></script>
-		<script src="/src/bower_components/angular-material/angular-material.js"></script>
-		<script src="/src/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-		<script src="/src/bower_components/chart.js/dist/Chart.js"></script>
-		<script src="/src/bower_components/angular-chart.js/dist/angular-chart.js"></script>
-		<script src="/app/app.js"></script>
-		<script src="/app/app.config.js"></script>
-		<script src="/app/modules/explorer/explorerModule.js"></script>
-		<script src="/app/modules/home/homeModule.js"></script>
-		<script src="/app/modules/statistics/statisticsModule.js"></script>
-		<script src="/app/modules/explorer/explorerRoute.js"></script>
-		<script src="/app/modules/home/homeRoute.js"></script>
-		<script src="/app/modules/statistics/statisticsRoute.js"></script>
-		<script src="/app/modules/explorer/explorerCtrl.js"></script>
-		<script src="/app/modules/home/homeCtrl.js"></script>
-		<script src="/app/modules/statistics/statisticsCtrl.js"></script>
-		<script src="/app/modules/explorer/explorerService.js"></script>
-		<script src="/app/modules/home/homeService.js"></script>
-		<script src="/app/modules/statistics/statisticsService.js"></script>
-		<!-- endinjector -->
+                <ul class="copyright">
+                    <li>&copy; Les Cours'get - HEIG-VD</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+                </ul>
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.dropotron.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollgress.min.js"></script>
-			<script src="assets/js/skel.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="assets/js/main.js"></script>
+            </footer>
 
-	</body>
+        </div>
+
+        <!-- injector:js -->
+        <script src="/app/assets/js/github-explorer-angularbundle.js"></script>
+        <script src="/app/assets/js/github-explorer-appbundle.js"></script>
+        <script src="/app/assets/js/templates.js"></script>
+        <script src="/app/assets/js/tweb-app-01-angularbundle.js"></script>
+        <script src="/app/assets/js/tweb-app-01-appbundle.js"></script>
+        <!-- endinjector -->
+
+        <!-- Theme's scripts -->
+        <script src="/app/assets/theme/js/jquery.min.js"></script>
+        <script src="/app/assets/theme/js/jquery.dropotron.min.js"></script>
+        <script src="/app/assets/theme/js/jquery.scrolly.min.js"></script>
+        <script src="/app/assets/theme/js/jquery.scrollgress.min.js"></script>
+        <script src="/app/assets/theme/js/skel.min.js"></script>
+        <script src="/app/assets/theme/js/util.js"></script>
+        <!--[if lte IE 8]><script src="/app/assets/theme/js/ie/respond.min.js"></script><![endif]-->
+        <script src="/app/assets/theme/js/main.js"></script>
+
+    </body>
 </html>

@@ -9,15 +9,15 @@
  */
 
 angular.module('home')
-	.config(['$stateProvider', function ($stateProvider) {
+    .config(['$stateProvider', function ($stateProvider) {
+        
+        $stateProvider
+            .state('home', {
+                url:'/',
+                templateUrl: 'app/modules/home/home.html',
+                controller: 'HomeCtrl',
+                controllerAs: 'vm'
+            });
 
-		$stateProvider
-			.state('home', {
-				url:'/home',
-				templateUrl: 'app/modules/home/home.html',
-				controller: 'HomeCtrl',
-				controllerAs: 'vm'
-			});
-
-
-	}]);
+        
+    }]);
