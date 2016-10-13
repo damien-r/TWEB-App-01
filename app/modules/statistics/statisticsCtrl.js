@@ -13,78 +13,72 @@
         .module('statistics')
         .controller('StatisticsCtrl', Statistics);
 
-        Statistics.$inject = ['$interval'];
+        Statistics.$inject = ['$http'];
 
         /*
         * recommend
         * Using function declarations
         * and bindable members up top.
         */
+        function Statistics($http) {
+            var github = "https://api.github.com";
+            var auth = "?access_token=db8ad2bce4a1ba1a2aeb717a49902f39e64763b4";
+            var repoAuthor = 'damienrochat';
+            var repoName = 'TWEB-App-01';
 
-        function Statistics($interval) {
             /*jshint validthis: true */
             var vm = this;
 
-            /* Bubble chart configurations
-            * http://jtblin.github.io/angular-chart.js/ */
-            vm.series = ['Series A', 'Series B'];
-            vm.data = [
-                [{
-                    x: 40,
-                    y: 10,
-                    r: 20
-                }],
-                [{
-                    x: 10,
-                    y: 40,
-                    r: 50
-                }]
-            ];
+            vm.labels = [];
+            vm.series = ['Additions', 'Deletions'];
+            vm.data = [[],[]];
+            vm.repoName = repoName;
 
+            /**
+             * Github API call to get the number of addition and deletions per week
+             */
+            $http({
+                method: 'GET',
+                url: github+'/repos/'+repoAuthor+'/'+repoName+'/stats/code_frequency'+auth
+            })
+                .then(function successCallback(response) {
+                   console.log(response.data);
+                    return response.data;
+                })
+                .then(function (addAndDelPerWeek){
+                    addAndDelPerWeek.forEach(function (value) {
+                        var date = new Date(value[0] * 1000);
+                        vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
+                        vm.data[0].push(value[1]);
+                        vm.data[1].push(Math.abs(value[2]));
+                    })
+                })
+                .catch(function errorCallback(response){
+                    console.log(response);
+                });
+
+            vm.onClick = function (points, evt) {
+                console.log(points, evt);
+            };
+            vm.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
             vm.options = {
                 scales: {
-                    xAxes: [{
-                        display: false,
-                        ticks: {
-                            max: 125,
-                            min: -125,
-                            stepSize: 10
+                    yAxes: [
+                        {
+                            id: 'y-axis-1',
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                        },
+                        {
+                            id: 'y-axis-2',
+                            type: 'linear',
+                            display: true,
+                            position: 'right'
                         }
-                    }],
-                    yAxes: [{
-                        display: false,
-                        ticks: {
-                            max: 125,
-                            min: -125,
-                            stepSize: 10
-                        }
-                    }]
+                    ]
                 }
             };
-
-            createChart();
-            $interval(createChart, 2000);
-
-            function createChart () {
-                vm.series = [];
-                vm.data = [];
-                for (var i = 0; i < 50; i++) {
-                    vm.series.push('Series ${i}');
-                    vm.data.push([{
-                        x: randomScalingFactor(),
-                        y: randomScalingFactor(),
-                        r: randomRadius()
-                    }]);
-                }
-            }
-
-            function randomScalingFactor () {
-                return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-            }
-
-            function randomRadius () {
-                return Math.abs(randomScalingFactor()) / 4;
-            }
         }
 
 })();

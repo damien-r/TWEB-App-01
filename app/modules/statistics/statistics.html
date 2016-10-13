@@ -3,10 +3,19 @@
         <section>
 
             <header>
+                <h3>Github repo</h3>
+                <p>This graph shows the number of additions and deletions per week for the {{ vm.repoName }} repo.</p>
+                <canvas id="line" class="chart chart-line" chart-data="vm.data"
+                        chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
+                        chart-dataset-override="vm.datasetOverride" chart-click="vm.onClick" chart-colors="vm.colors">
+                </canvas>
+            </header>
+
+            <!--<header>
                 <h3>Let's make some bubbles</h3>
                 <canvas id="base" class="chart-bubble" chart-data="vm.data" chart-series="vm.series" chart-options="vm.options">
                 </canvas>
-            </header>
+            </header>-->
 
         </section>
     </div>
