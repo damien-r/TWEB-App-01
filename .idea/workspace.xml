@@ -2,10 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c225284f-4f65-4e9e-a307-83b8e259a862" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/js/github-explorer-appbundle.js" afterPath="$PROJECT_DIR$/app/assets/js/github-explorer-appbundle.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js" afterPath="$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
     </list>
     <ignored path="TWEB-App-01.iws" />
@@ -28,21 +24,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="640">
-              <caret line="148" column="32" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
+            <state relative-caret-position="530">
+              <caret line="143" column="59" selection-start-line="143" selection-start-column="59" selection-end-line="143" selection-end-column="59" />
               <folding>
-                <marker date="1476369453453" expanded="true" signature="1038:1449" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="1553:6601" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="1699:2013" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="2067:3945" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="3999:6576" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="6663:7089" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="6699:6888" ph="..." />
-                <marker date="1476369453453" expanded="true" signature="6928:7066" ph="..." />
-                <marker date="1476369453453" expanded="false" signature="6954:6960" ph="©" />
+                <marker date="1476369689185" expanded="false" signature="6954:6960" ph="©" />
               </folding>
             </state>
           </provider>
@@ -68,7 +56,17 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statisticsCtrl.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Gruntfile.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="556">
+              <caret line="163" column="29" selection-start-line="163" selection-start-column="24" selection-end-line="163" selection-end-column="29" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="statisticsCtrl.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="480">
@@ -161,7 +159,6 @@
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/app/app.config.js" />
         <option value="$PROJECT_DIR$/app/modules/statistics/statistics.html" />
-        <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/bower.json" />
         <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/utils/auth_token" />
@@ -169,6 +166,7 @@
         <option value="$PROJECT_DIR$/utils/configService.json" />
         <option value="$PROJECT_DIR$/app/utils/configService.json" />
         <option value="$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js" />
+        <option value="$PROJECT_DIR$/index.html" />
       </list>
     </option>
   </component>
@@ -776,12 +774,12 @@
       <workItem from="1475078071976" duration="11094000" />
       <workItem from="1476279274026" duration="4236000" />
       <workItem from="1476339237804" duration="12221000" />
-      <workItem from="1476367793314" duration="1538000" />
+      <workItem from="1476367793314" duration="1748000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29089000" />
+    <option name="totallyTimeSpent" value="29299000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -836,15 +834,7 @@
         <state relative-caret-position="320">
           <caret line="20" column="31" selection-start-line="20" selection-start-column="31" selection-end-line="20" selection-end-column="31" />
           <folding>
-            <marker date="1476369453453" expanded="true" signature="1038:1449" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1553:6601" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1699:2013" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="2067:3945" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="3999:6576" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6663:7089" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6699:6888" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6928:7066" ph="..." />
-            <marker date="1476369453453" expanded="false" signature="6954:6960" ph="©" />
+            <marker date="1476369689185" expanded="false" signature="6954:6960" ph="©" />
           </folding>
         </state>
       </provider>
@@ -921,15 +911,7 @@
         <state relative-caret-position="144">
           <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
           <folding>
-            <marker date="1476369453453" expanded="true" signature="1038:1449" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1553:6601" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1699:2013" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="2067:3945" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="3999:6576" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6663:7089" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6699:6888" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6928:7066" ph="..." />
-            <marker date="1476369453453" expanded="false" signature="6954:6960" ph="©" />
+            <marker date="1476369689185" expanded="false" signature="6954:6960" ph="©" />
           </folding>
         </state>
       </provider>
@@ -1129,14 +1111,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="928">
-          <caret line="58" column="122" selection-start-line="58" selection-start-column="122" selection-end-line="58" selection-end-column="122" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -1193,24 +1167,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="640">
-          <caret line="148" column="32" selection-start-line="148" selection-start-column="32" selection-end-line="148" selection-end-column="32" />
-          <folding>
-            <marker date="1476369453453" expanded="true" signature="1038:1449" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1553:6601" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="1699:2013" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="2067:3945" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="3999:6576" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6663:7089" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6699:6888" ph="..." />
-            <marker date="1476369453453" expanded="true" signature="6928:7066" ph="..." />
-            <marker date="1476369453453" expanded="false" signature="6954:6960" ph="©" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/modules/statistics/configService.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="48">
@@ -1224,6 +1180,24 @@
         <state relative-caret-position="480">
           <caret line="57" column="23" selection-start-line="57" selection-start-column="23" selection-end-line="57" selection-end-column="23" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="556">
+          <caret line="163" column="29" selection-start-line="163" selection-start-column="24" selection-end-line="163" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="530">
+          <caret line="143" column="59" selection-start-line="143" selection-start-column="59" selection-end-line="143" selection-end-column="59" />
+          <folding>
+            <marker date="1476369689185" expanded="false" signature="6954:6960" ph="©" />
+          </folding>
         </state>
       </provider>
     </entry>
