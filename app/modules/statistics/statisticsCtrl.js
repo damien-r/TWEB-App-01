@@ -44,7 +44,6 @@
             vm.data = [[],[]];
             vm.repoName = repo;
 
-            console.log("github token : " + GITHUB_TOKEN);
             /**
              * Github API call to get the number of addition and deletions per week
              */
