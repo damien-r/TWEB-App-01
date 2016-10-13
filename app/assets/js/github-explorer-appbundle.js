@@ -285,8 +285,9 @@ angular.module('statistics')
             var repo = "TWEB-App-01";
 
             $http.get( "/api/github").success(function( data ) {
-                console.log(data); //from your sample;
-                alert( "Load was performed. " + data );
+                auth += data.token;
+            }).catch(function errorCallback(response){
+                console.log(response);
             });
 
             /*jshint validthis: true */
@@ -303,7 +304,7 @@ angular.module('statistics')
              */
             $http({
                 method: 'GET',
-                url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+"671468ebcf91902befa9aca910b5f33e4a9039db"
+                url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth
             })
                 .then(function successCallback(response) {
                    console.log(response.data);
