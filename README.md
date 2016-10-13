@@ -9,4 +9,5 @@
 - Browse at `localhost:4000`
 
 ## Check the app on the web
+The Landing page is [here](https://damienrochat.github.io/TWEB-App-01/)
 Open [http://courgettes-github-explorer.herokuapp.com](http://courgettes-github-explorer.herokuapp.com)
