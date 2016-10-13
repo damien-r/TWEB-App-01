@@ -33,7 +33,7 @@
 
             $http.get( "/api/github").success(function( data ) {
                 console.log(data);
-                token = data;
+                token = data.token;
             }).catch(function errorCallback(response){
                 console.log(response);
             });
