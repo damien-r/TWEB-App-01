@@ -255,7 +255,7 @@ angular.module('statistics')
 (function() {
     'use strict';
 
-        Statistics.$inject = ['$http'];
+        Statistics.$inject = ['$http', 'process'];
 
 
     /**
@@ -277,7 +277,7 @@ angular.module('statistics')
         */
 
 
-        function Statistics($http) {
+        function Statistics($http, process) {
 
             var github = "https://api.github.com";
             var auth = "?access_token=";
