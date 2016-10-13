@@ -306,10 +306,11 @@ angular.module('statistics')
                         url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+response.data.token
                     })
                         .then(function successCallback(response) {
-                            return response.data;
+                            var addAndDelPerWeek = response.data;
+                            return addAndDelPerWeek;
                         })
-                        .then(function (addAndDelPerWeek){
-                            addAndDelPerWeek.forEach(function (value) {
+                        .then(function(addAndDelPerWeek) {
+                            addAndDelPerWeek.forEach( function(value) {
                                 var date = new Date(value[0] * 1000);
                                 vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
                                 vm.data[0].push(value[1]);

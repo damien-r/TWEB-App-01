@@ -46,28 +46,50 @@ angular.module('github-explorer').run(['$templateCache', function($templateCache
 
 
   $templateCache.put('app/modules/statistics/statistics.html',
-    "<section class=\"wrapper style4 container\">\n" +
-    "    <div class=\"content\">\n" +
-    "        <section>\n" +
+    "<section class=\"wrapper style4 container\">\r" +
     "\n" +
-    "            <header>\n" +
-    "                <h3>Github repo</h3>\n" +
-    "                <p>This graph shows the number of additions and deletions per week for the {{ vm.repoName }} repo.</p>\n" +
-    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"vm.data\"\n" +
-    "                        chart-labels=\"vm.labels\" chart-series=\"vm.series\" chart-options=\"vm.options\"\n" +
-    "                        chart-dataset-override=\"vm.datasetOverride\" chart-click=\"vm.onClick\" chart-colors=\"vm.colors\">\n" +
-    "                </canvas>\n" +
-    "            </header>\n" +
+    "    <div class=\"content\">\r" +
     "\n" +
-    "            <!--<header>\n" +
-    "                <h3>Let's make some bubbles</h3>\n" +
-    "                <canvas id=\"base\" class=\"chart-bubble\" chart-data=\"vm.data\" chart-series=\"vm.series\" chart-options=\"vm.options\">\n" +
-    "                </canvas>\n" +
-    "            </header>-->\n" +
+    "        <section>\r" +
     "\n" +
-    "        </section>\n" +
-    "    </div>\n" +
-    "</section>\n"
+    "\r" +
+    "\n" +
+    "            <header>\r" +
+    "\n" +
+    "                <h3>Github repo</h3>\r" +
+    "\n" +
+    "                <p>This graph shows the number of additions and deletions per week for the {{ vm.repoName }} repo.</p>\r" +
+    "\n" +
+    "                <canvas id=\"line\" class=\"chart chart-line\" chart-data=\"vm.data\"\r" +
+    "\n" +
+    "                        chart-labels=\"vm.labels\" chart-series=\"vm.series\" chart-options=\"vm.options\"\r" +
+    "\n" +
+    "                        chart-dataset-override=\"vm.datasetOverride\" chart-click=\"vm.onClick\" chart-colors=\"vm.colors\">\r" +
+    "\n" +
+    "                </canvas>\r" +
+    "\n" +
+    "            </header>\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "            <!--<header>\r" +
+    "\n" +
+    "                <h3>Let's make some bubbles</h3>\r" +
+    "\n" +
+    "                <canvas id=\"base\" class=\"chart-bubble\" chart-data=\"vm.data\" chart-series=\"vm.series\" chart-options=\"vm.options\">\r" +
+    "\n" +
+    "                </canvas>\r" +
+    "\n" +
+    "            </header>-->\r" +
+    "\n" +
+    "\r" +
+    "\n" +
+    "        </section>\r" +
+    "\n" +
+    "    </div>\r" +
+    "\n" +
+    "</section>\r" +
+    "\n"
   );
 
 }]);
