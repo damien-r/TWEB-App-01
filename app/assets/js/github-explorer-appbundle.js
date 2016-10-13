@@ -292,22 +292,6 @@ angular.module('statistics')
             //     console.log(response);
             // });
 
-            $http({
-                method: 'GET',
-                url: '/api/github'
-            })
-                .then(function successCallback(response) {
-                    return response.data;
-                })
-                .then(function (saveToken) {
-                    token = saveToken.token;
-                })
-                .catch(function errorCallback(response){
-                    console.log(response);
-                });
-
-
-
             /*jshint validthis: true */
             var vm = this;
 
@@ -323,23 +307,35 @@ angular.module('statistics')
              */
             $http({
                 method: 'GET',
-                url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+token
+                url: '/api/github'
             })
                 .then(function successCallback(response) {
-                   console.log(response.data);
-                    return response.data;
-                })
-                .then(function (addAndDelPerWeek){
-                    addAndDelPerWeek.forEach(function (value) {
-                        var date = new Date(value[0] * 1000);
-                        vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
-                        vm.data[0].push(value[1]);
-                        vm.data[1].push(Math.abs(value[2]));
-                    });
+
+                    $http({
+                        method: 'GET',
+                        url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+response.data.token
+                    })
+                        .then(function successCallback(response) {
+                            console.log(response.data);
+                            return response.data;
+                        })
+                        .then(function (addAndDelPerWeek){
+                            addAndDelPerWeek.forEach(function (value) {
+                                var date = new Date(value[0] * 1000);
+                                vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
+                                vm.data[0].push(value[1]);
+                                vm.data[1].push(Math.abs(value[2]));
+                            });
+                        })
+                        .catch(function errorCallback(response){
+                            console.log(response);
+                        });
                 })
                 .catch(function errorCallback(response){
                     console.log(response);
                 });
+
+
 
             vm.onClick = function (points, evt) {
                 console.log(points, evt);
