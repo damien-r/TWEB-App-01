@@ -30,6 +30,11 @@
             var author = "damienrochat";
             var repo = "TWEB-App-01";
 
+            $http.get( "/api/github").success(function( data ) {
+                console.log(data); //from your sample;
+                alert( "Load was performed. " + data );
+            });
+
             /*jshint validthis: true */
             var vm = this;
 

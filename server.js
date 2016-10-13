@@ -9,6 +9,10 @@ if (GITHUB_TOKEN === undefined) {
     process.exit(1);
 }
 
+app.get('/api/github',function(req, res){
+    return res.json({ token: GITHUB_TOKEN });
+});
+
 app.set('port', (process.env.PORT || 4000));
 
 app.use(express.static(__dirname + '/'));
