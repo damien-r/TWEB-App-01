@@ -287,10 +287,18 @@ angular.module('statistics')
 
             $http.get( "/api/github").success(function( data ) {
                 console.log(data);
-                token = data.token;
+                token = data.data.token;
             }).catch(function errorCallback(response){
                 console.log(response);
             });
+            //
+            // $http({
+            //     method: 'GET',
+            //     url: '/api/github'
+            // })
+            //     .then(function successCallback(response) {
+            //         console.log(response.)
+            //     })
 
             /*jshint validthis: true */
             var vm = this;
