@@ -2,6 +2,7 @@ var express = require('express');
 var app = express();
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+console.log(GITHUB_TOKEN);
 
 if (GITHUB_TOKEN === undefined) {
     console.log("GITHUB_TOKEN is undefined");
