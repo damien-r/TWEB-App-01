@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-        Statistics.$inject = ['$http', 'process'];
+        Statistics.$inject = ['$http'];
 
 
     /**
@@ -23,7 +23,7 @@
         */
 
 
-        function Statistics($http, process) {
+        function Statistics($http) {
 
             var github = "https://api.github.com";
             var auth = "?access_token=";
@@ -38,7 +38,7 @@
             vm.data = [[],[]];
             vm.repoName = repo;
 
-            console.log("github token : " + process.env.GITHUB_TOKEN);
+            console.log("github token : " + GITHUB_TOKEN);
             /**
              * Github API call to get the number of addition and deletions per week
              */
