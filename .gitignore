@@ -53,3 +53,6 @@ bower_components
 .bower-cache
 .bower-registry
 .bower-tmp
+
+# Remove utility content #
+utils
