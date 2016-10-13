@@ -10,7 +10,7 @@ if (GITHUB_TOKEN === undefined) {
 }
 
 app.get('/api/github',function(req, res){
-    return res.json({ token: GITHUB_TOKEN });
+    return GITHUB_TOKEN;
 });
 
 app.set('port', (process.env.PORT || 4000));

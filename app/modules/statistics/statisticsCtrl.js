@@ -27,12 +27,13 @@
 
             var github = "https://api.github.com";
             var auth = "?access_token=";
-            var token;
+            var token = "";
             var author = "damienrochat";
             var repo = "TWEB-App-01";
 
             $http.get( "/api/github").success(function( data ) {
                 console.log(data);
+                token = data;
             }).catch(function errorCallback(response){
                 console.log(response);
             });
@@ -44,6 +45,8 @@
             vm.series = ['Additions', 'Deletions'];
             vm.data = [[],[]];
             vm.repoName = repo;
+
+            console.log("token = " + token);
 
             /**
              * Github API call to get the number of addition and deletions per week
