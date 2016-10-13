@@ -281,16 +281,8 @@ angular.module('statistics')
 
             var github = "https://api.github.com";
             var auth = "?access_token=";
-            var token = "";
             var author = "damienrochat";
             var repo = "TWEB-App-01";
-
-            // $http.get( "/api/github").success(function( data ) {
-            //     console.log(data);
-            //     token = data.data.token;
-            // }).catch(function errorCallback(response){
-            //     console.log(response);
-            // });
 
             /*jshint validthis: true */
             var vm = this;
@@ -299,8 +291,6 @@ angular.module('statistics')
             vm.series = ['Additions', 'Deletions'];
             vm.data = [[],[]];
             vm.repoName = repo;
-
-            console.log(token);
 
             /**
              * Github API call to get the number of addition and deletions per week
@@ -316,7 +306,6 @@ angular.module('statistics')
                         url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+response.data.token
                     })
                         .then(function successCallback(response) {
-                            console.log(response.data);
                             return response.data;
                         })
                         .then(function (addAndDelPerWeek){
