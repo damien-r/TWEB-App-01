@@ -31,20 +31,28 @@
             var author = "damienrochat";
             var repo = "TWEB-App-01";
 
-            $http.get( "/api/github").success(function( data ) {
-                console.log(data);
-                token = data.data.token;
-            }).catch(function errorCallback(response){
-                console.log(response);
-            });
-            //
-            // $http({
-            //     method: 'GET',
-            //     url: '/api/github'
-            // })
-            //     .then(function successCallback(response) {
-            //         console.log(response.)
-            //     })
+            // $http.get( "/api/github").success(function( data ) {
+            //     console.log(data);
+            //     token = data.data.token;
+            // }).catch(function errorCallback(response){
+            //     console.log(response);
+            // });
+
+            $http({
+                method: 'GET',
+                url: '/api/github'
+            })
+                .then(function successCallback(response) {
+                    return response.data;
+                })
+                .then(function (saveToken) {
+                    token = saveToken.token;
+                })
+                .catch(function errorCallback(response){
+                    console.log(response);
+                });
+
+
 
             /*jshint validthis: true */
             var vm = this;
@@ -54,7 +62,7 @@
             vm.data = [[],[]];
             vm.repoName = repo;
 
-            console.log("token = " + token);
+            console.log(token);
 
             /**
              * Github API call to get the number of addition and deletions per week
