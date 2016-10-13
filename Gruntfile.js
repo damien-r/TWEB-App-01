@@ -131,7 +131,8 @@ module.exports = function (grunt) {
 				files: {
 					'index.html': [
 						'app/assets/css/**/*.css',
-						'app/assets/js/*.js'
+						'app/assets/js/*.js',
+                        '!app/assets/js/tweb-app-01-*.js' // Hack to exclude duplicated files
 					]
 
 				}
@@ -173,5 +174,5 @@ module.exports = function (grunt) {
 
 	// Development task(s).
 	grunt.registerTask('dev', ['injector:dev', 'concurrent']);
-	
+
 };
