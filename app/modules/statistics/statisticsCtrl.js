@@ -32,7 +32,7 @@
             var repo = "TWEB-App-01";
 
             $http.get( "/api/github").success(function( data ) {
-                token = data.token;
+                token = data;
             }).catch(function errorCallback(response){
                 console.log(response);
             });
