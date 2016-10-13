@@ -27,14 +27,16 @@
 
             var github = "https://api.github.com";
             var auth = "?access_token=";
+            var token;
             var author = "damienrochat";
             var repo = "TWEB-App-01";
 
             $http.get( "/api/github").success(function( data ) {
-                auth += data.token;
+                token = data.token;
             }).catch(function errorCallback(response){
                 console.log(response);
             });
+            console.log(token);
 
             /*jshint validthis: true */
             var vm = this;
@@ -49,7 +51,7 @@
              */
             $http({
                 method: 'GET',
-                url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth
+                url: github+'/repos/'+author+'/'+repo+'/stats/code_frequency'+auth+token
             })
                 .then(function successCallback(response) {
                    console.log(response.data);
