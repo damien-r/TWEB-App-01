@@ -32,11 +32,10 @@
             var repo = "TWEB-App-01";
 
             $http.get( "/api/github").success(function( data ) {
-                token = data;
+                console.log(data);
             }).catch(function errorCallback(response){
                 console.log(response);
             });
-            console.log(token);
 
             /*jshint validthis: true */
             var vm = this;
