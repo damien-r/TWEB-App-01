@@ -34,15 +34,15 @@
             vm.labels = [];
             vm.series = ['Additions', 'Deletions'];
             vm.data = [[],[]];
-            vm.userName;
-            vm.userNameError;
-            vm.repoName;
-            vm.repoNameError;
-            vm.responseCallback;
+            vm.userName = undefined;
+            vm.userNameError = undefined;
+            vm.repoName = undefined;
+            vm.repoNameError = undefined;
+            vm.responseCallback = undefined;
             vm.watchStats = watchStats;
             vm.onClick = onClick;
-            vm.datasetOverride;
-            vm.options;
+            vm.datasetOverride = undefined;
+            vm.options = undefined;
 
             // This function is called when the user gives a username and a
             // repo name
@@ -92,8 +92,8 @@
                                     });
                                 })
                                 .catch(function errorCallback(response){
-                                    vm.responseCallback = "error " + response.status + " " + response.statusText
-                                        + " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
+                                    vm.responseCallback = "error " + response.status + " " + response.statusText +
+                                        " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
                                     console.log(response);
                                 });
 
@@ -111,7 +111,7 @@
 
             function onClick (points, evt) {
                 console.log(points, evt);
-            };
+            }
             vm.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
             vm.options = {
                 scales: {

@@ -2,15 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c225284f-4f65-4e9e-a307-83b8e259a862" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/assets/js/tweb-app-01-angularbundle.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/assets/js/tweb-app-01-appbundle.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/theme/css/main.css" afterPath="$PROJECT_DIR$/app/assets/theme/css/main.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/modules/statistics/statistics.html" afterPath="$PROJECT_DIR$/app/modules/statistics/statistics.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/js/github-explorer-angularbundle.js" afterPath="$PROJECT_DIR$/app/assets/js/github-explorer-angularbundle.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/js/github-explorer-appbundle.js" afterPath="$PROJECT_DIR$/app/assets/js/github-explorer-appbundle.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/assets/js/templates.js" afterPath="$PROJECT_DIR$/app/assets/js/templates.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js" afterPath="$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/index.html" afterPath="$PROJECT_DIR$/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server.js" afterPath="$PROJECT_DIR$/server.js" />
     </list>
     <ignored path="TWEB-App-01.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -35,18 +32,37 @@
       <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+            <state relative-caret-position="240">
+              <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+              <folding>
+                <marker date="1476623837493" expanded="true" signature="803:2994" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="835:2086" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="1038:1361" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="1465:1582" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="1644:2070" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="1680:1869" ph="..." />
+                <marker date="1476623837493" expanded="true" signature="1909:2047" ph="..." />
+                <marker date="1476623837493" expanded="false" signature="1935:1941" ph="©" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="statisticsCtrl.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="441">
+              <caret line="44" column="35" selection-start-line="44" selection-start-column="35" selection-end-line="44" selection-end-column="35" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="statisticsCtrl.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js">
+      <file leaf-file-name="statistics-test.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/modules/statistics/statistics-test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="448">
-              <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -62,11 +78,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/assets/theme/css/main.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2181">
-              <caret line="3166" column="0" selection-start-line="3166" selection-start-column="0" selection-end-line="3166" selection-end-column="0" />
+            <state relative-caret-position="261">
+              <caret line="3046" column="21" selection-start-line="3046" selection-start-column="21" selection-end-line="3046" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -863,12 +879,12 @@
       <workItem from="1476367793314" duration="7383000" />
       <workItem from="1476376064179" duration="268000" />
       <workItem from="1476380357804" duration="1311000" />
-      <workItem from="1476613774733" duration="7428000" />
+      <workItem from="1476613774733" duration="7697000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43941000" />
+    <option name="totallyTimeSpent" value="44210000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
@@ -957,7 +973,16 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
           <caret line="9" column="32" selection-start-line="9" selection-start-column="32" selection-end-line="9" selection-end-column="32" />
-          <folding />
+          <folding>
+            <marker date="1476623837493" expanded="true" signature="803:2994" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="835:2086" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1038:1361" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1465:1582" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1644:2070" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1680:1869" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1909:2047" ph="..." />
+            <marker date="1476623837493" expanded="false" signature="1935:1941" ph="©" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1093,13 +1118,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/statistics/statistics-test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/bower.json">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="336">
@@ -1223,9 +1241,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="352">
-          <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
-          <folding />
+        <state relative-caret-position="240">
+          <caret line="15" column="35" selection-start-line="15" selection-start-column="35" selection-end-line="15" selection-end-column="35" />
+          <folding>
+            <marker date="1476623837493" expanded="true" signature="803:2994" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="835:2086" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1038:1361" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1465:1582" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1644:2070" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1680:1869" ph="..." />
+            <marker date="1476623837493" expanded="true" signature="1909:2047" ph="..." />
+            <marker date="1476623837493" expanded="false" signature="1935:1941" ph="©" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1245,14 +1272,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="448">
-          <caret line="28" column="37" selection-start-line="28" selection-start-column="37" selection-end-line="28" selection-end-column="37" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/modules/statistics/statistics.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="448">
@@ -1263,8 +1282,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/assets/theme/css/main.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2181">
-          <caret line="3166" column="0" selection-start-line="3166" selection-start-column="0" selection-end-line="3166" selection-end-column="0" />
+        <state relative-caret-position="261">
+          <caret line="3046" column="21" selection-start-line="3046" selection-start-column="21" selection-end-line="3046" selection-end-column="21" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/statistics/statistics-test.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/modules/statistics/statisticsCtrl.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="441">
+          <caret line="44" column="35" selection-start-line="44" selection-start-column="35" selection-end-line="44" selection-end-column="35" />
           <folding />
         </state>
       </provider>
