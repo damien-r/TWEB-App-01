@@ -1,17 +1,20 @@
 var express = require('express');
 var app = express();
 
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-console.log(GITHUB_TOKEN);
-
+// Get Github Token from environment variable
+var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 if (GITHUB_TOKEN === undefined) {
     console.log("GITHUB_TOKEN is undefined");
     process.exit(1);
 }
 
+// Define REST API to get github token from angularjs app
 app.get('/api/github',function(req, res){
     return res.json({ token: GITHUB_TOKEN });
 });
+
+// Define REST API for mongoDB
+// TODO
 
 app.set('port', (process.env.PORT || 4000));
 

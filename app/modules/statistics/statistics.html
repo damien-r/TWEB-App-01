@@ -1,22 +1,37 @@
-<section class="wrapper style4 container">
-    <div class="content">
-        <section>
 
-            <header>
-                <h3>Github repo</h3>
-                <p>This graph shows the number of additions and deletions per week for the {{ vm.repoName }} repo.</p>
-                <canvas id="line" class="chart chart-line" chart-data="vm.data"
-                        chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
-                        chart-dataset-override="vm.datasetOverride" chart-click="vm.onClick" chart-colors="vm.colors">
-                </canvas>
-            </header>
+<header class="special container">
+    <span class="icon fa-area-chart"></span>
+    <h2>Github repository <strong>statistics</strong></h2>
+    <p>This graph shows the number of additions and deletions per week <br>
+        for a given github username or organization and one of his public repository.</p>
+</header>
 
-            <!--<header>
-                <h3>Let's make some bubbles</h3>
-                <canvas id="base" class="chart-bubble" chart-data="vm.data" chart-series="vm.series" chart-options="vm.options">
-                </canvas>
-            </header>-->
-
-        </section>
-    </div>
-</section>
+    <section class="wrapper style4 special container 75%">
+        <div class="content">
+            <form ng-submit="vm.watchStats()" >
+                <div class="row 50%">
+                    <div class="6u 12u(mobile)">
+                        <input type="text" ng-model="vm.userName" name="username" placeholder="Github username" />
+                        <small class="warning">{{ vm.userNameError }}</small>
+                    </div>
+                    <div class="6u 12u(mobile)">
+                        <input type="text" ng-model="vm.repoName" name="reponame" placeholder="Github repository name" />
+                        <small class="warning">{{ vm.repoNameError }}</small>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="12u">
+                        <ul class="buttons">
+                            <li><input type="submit" class="special" value="Watch statistics" /></li>
+                        </ul>
+                    </div>
+                </div>
+            </form>
+            <br>
+            <p><strong>{{ vm.responseCallback }}</strong></p>
+            <canvas id="line" class="chart chart-line" chart-data="vm.data"
+                    chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
+                    chart-dataset-override="vm.datasetOverride" chart-click="vm.onClick" chart-colors="vm.colors">
+            </canvas>
+        </div>
+    </section>

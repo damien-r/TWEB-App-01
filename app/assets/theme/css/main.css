@@ -476,7 +476,7 @@
 	@media screen and (max-width: 1680px) {
 
 		.row > * {
-			padding: 40px 0 0 40px;
+			padding: 10px 0 0 40px;
 		}
 
 		.row {
@@ -691,7 +691,7 @@
 	@media screen and (max-width: 1280px) {
 
 		.row > * {
-			padding: 40px 0 0 40px;
+			padding: 10px 0 0 40px;
 		}
 
 		.row {
@@ -3194,3 +3194,7 @@
 			}
 
 	}
+
+.warning {
+    color: red;
+}
