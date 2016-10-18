@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var rp = require('request-promise');
 var MongoClient = require('mongodb').MongoClient;
-var {ObjectId} = require('mongodb');
+var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
 // Get Github Token from environment variable
@@ -134,7 +134,7 @@ function getGithubStats(context) {
 function getStatFromDB(context) {
     console.log("Getting stats from DB...");
     var collection = context.db.collection("githubstats");
-    return collection.findOne({_id: new ObjectId(context._id)})
+    return collection.findOne({_id: new ObjectID(context._id)})
         .then(function (document){
             console.log(document);
             context._id = document._id;
