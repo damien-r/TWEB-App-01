@@ -6,32 +6,68 @@
         for a given github username or organization and one of his public repository.</p>
 </header>
 
-    <section class="wrapper style4 special container 75%">
-        <div class="content">
-            <form ng-submit="vm.watchStats()" >
-                <div class="row 50%">
-                    <div class="6u 12u(mobile)">
-                        <input type="text" ng-model="vm.userName" name="username" placeholder="Github username" />
-                        <small class="warning">{{ vm.userNameError }}</small>
+<section class="wrapper style4 special container">
+    <div class="row">
+        <div class="6u 12u(narrower)">
+            <section>
+                <header>
+                    <h3>Provide the data</h3>
+                </header>
+                <form ng-submit="vm.watchStats(vm.userName, vm.repoName)" >
+                    <div class="row 50%">
+                        <div class="6u 12u(mobile)">
+                            <input type="text" ng-model="vm.userName" name="username" placeholder="Github username" />
+                            <small class="warning">{{ vm.userNameError }}</small>
+                        </div>
+                        <div class="6u 12u(mobile)">
+                            <input type="text" ng-model="vm.repoName" name="reponame" placeholder="Github repository name" />
+                            <small class="warning">{{ vm.repoNameError }}</small>
+                        </div>
                     </div>
-                    <div class="6u 12u(mobile)">
-                        <input type="text" ng-model="vm.repoName" name="reponame" placeholder="Github repository name" />
-                        <small class="warning">{{ vm.repoNameError }}</small>
+                    <div class="row">
+                        <div class="12u">
+                            <ul class="buttons">
+                                <li><input type="submit" class="special" value="Watch statistics" /></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="12u">
-                        <ul class="buttons">
-                            <li><input type="submit" class="special" value="Watch statistics" /></li>
-                        </ul>
-                    </div>
-                </div>
-            </form>
-            <br>
-            <p><strong>{{ vm.responseCallback }}</strong></p>
-            <canvas id="line" class="chart chart-line" chart-data="vm.data"
-                    chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
-                    chart-dataset-override="vm.datasetOverride" chart-click="vm.onClick" chart-colors="vm.colors">
-            </canvas>
+                </form>
+            </section>
+
         </div>
-    </section>
+        <div class="6u 12u(narrower)">
+
+            <section>
+                <header>
+                    <h3>Your history</h3>
+                </header>
+                <!--<p>Select a github repo in the list</p>-->
+                <!-- TODO: ng-repeat -->
+                <ul>
+                    <li ng-repeat="history in vm.history | orderBy:vm.date:true | limitTo:7">
+                        {{ history.date | date:"dd/MM/yyyy 'at' hh:mma" }} -
+                        <a href="" ng-click="vm.displayStatsFromDB(history._id)">
+                            {{ history.repo}}
+                        </a>
+                    </li>
+                </ul>
+                <!--
+                <select>
+                    <option value="volvo">No queries for now</option>
+                </select>
+                -->
+            </section>
+
+        </div>
+    </div>
+
+
+    <div class="row">
+        <br>
+        <p><strong>{{ vm.responseCallback }}</strong></p>
+        <canvas id="line" class="chart chart-line" chart-data="vm.data"
+                chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
+                chart-click="vm.onClick" chart-colors="vm.colors">
+        </canvas>
+    </div>
+</section>

@@ -1,5 +1,5 @@
 /*!
-* github-explorer - v0.0.1 - MIT LICENSE 2016-10-16. 
+* github-explorer - v0.0.1 - MIT LICENSE 2016-10-18. 
 * @author Les cours&#39;get
 */
 (function() {
@@ -276,11 +276,15 @@ angular.module('statistics')
 
 
         function Statistics($http) {
-
-            var github = "https://api.github.com";
-            var auth = "?access_token=";
-            var author = "damienrochat";
-            var repo = "TWEB-App-01";
+            var IP_USER = "::1";
+            var json = 'https://api.ipify.org?format=json';
+            $http.get(json).then(function(result) {
+                IP_USER = result.data.ip;
+            }, function(e) {
+                // We will consider that user is on localhsot
+                // and won't display error
+            });
+            fetchHistory(IP_USER);
 
             /*jshint validthis: true */
             var vm = this;
@@ -293,74 +297,81 @@ angular.module('statistics')
             vm.repoName = undefined;
             vm.repoNameError = undefined;
             vm.responseCallback = undefined;
-            vm.watchStats = watchStats;
+            vm.watchStats = watchStatsFromGithub;
             vm.onClick = onClick;
             vm.datasetOverride = undefined;
             vm.options = undefined;
+            vm.displayStatsFromDB = displayStatsFromDB;
+            vm.history = [];
 
             // This function is called when the user gives a username and a
-            // repo name
-            function watchStats() {
+            // repo name.
+            function watchStatsFromGithub(username, repo) {
                 var error = false;
-                if (!vm.userName) {
+                if (!username) {
                     vm.userNameError = "You must provide a github username";
                     error = true;
                 }
-                if (!vm.repoName) {
+                if (!repo) {
                     vm.repoNameError = "You must provide a github repository name";
                     error = true;
                 }
 
                 if (!error) {
                     vm.userNameError = vm.repoNameError = undefined;
-                    console.log(vm.userName + "/" + vm.repoName);
-
-                    vm.labels = [];
-                    vm.data = [[],[]];
                     vm.responseCallback = undefined;
 
-                    /**
-                     * Github API call to get the number of addition and deletions per week
-                     */
-                    $http({
-                        method: 'GET',
-                        url: '/api/github'
-                    })
-                        .then(function successCallback(response) {
-
-                            $http({
-                                method: 'GET',
-                                url: github+'/repos/'+vm.userName+'/'+vm.repoName+'/stats/code_frequency'+auth+response.data.token
-                            })
-                                .then(function successCallback(response) {
-                                    var addAndDelPerWeek = response.data;
-                                    vm.responseCallback = "Number of additions and deletions per week for " + vm.userName + "/" + vm.repoName + " repo.";
-                                    return addAndDelPerWeek;
-                                })
-                                .then(function(addAndDelPerWeek) {
-                                    addAndDelPerWeek.forEach( function(value) {
-                                        var date = new Date(value[0] * 1000);
-                                        vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
-                                        vm.data[0].push(value[1]);
-                                        vm.data[1].push(Math.abs(value[2]));
-                                    });
-                                })
-                                .catch(function errorCallback(response){
-                                    vm.responseCallback = "error " + response.status + " " + response.statusText +
-                                        " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
-                                    console.log(response);
-                                });
-
-                    })
-                    .catch(function errorCallback(response){
-                        vm.responseCallback = "error " + response.status + " " + response.statusText + " : " + response.data + " ";
-                        console.log(response);
-                    });
-
+                    // API call to get data of a given repository
+                    $http.get('/api/githubStats/' + username + "/" + repo)
+                        .then(displayStats)
+                        .then(displayHistory)
+                        .catch(function errorCallback(response){
+                            vm.labels = [];
+                            vm.data = [[],[]];
+                            vm.responseCallback = "error " + response.status + " " + response.statusText +
+                                " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
+                        });
                 } else {
                     vm.labels = [];
                     vm.data = [[],[]];
                 }
+            }
+
+            // Display stats of a given id. This id represents a document
+            // in a mongoDB collection.
+            function displayStatsFromDB(id) {
+                $http.get('/api/githubStats/' + id)
+                    .then(displayStats);
+            }
+
+            // Display statistics stored in the response parameter
+            function displayStats(response) {
+                vm.responseCallback = "Number of additions and deletions per week for " + response.data.repo + " repo.";
+                vm.labels = [];
+                vm.data = [[],[]];
+                Array.prototype.forEach.call(response.data.stats, value => {
+                    var date = new Date(value[0] * 1000);
+                    vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
+                    vm.data[0].push(value[1]);
+                    vm.data[1].push(Math.abs(value[2]));
+                });
+                return response.data;
+            }
+
+            function displayHistory(document) {
+                vm.history.push({_id: document._id, date: document.date, repo: document.repo});
+            }
+
+            function fetchHistory(ipUser) {
+                $http.get('/api/history/' + ipUser)
+                    .then(function successCallback(response){
+                        Array.prototype.forEach.call(response.data, value => {
+                            displayHistory(value);
+                        });
+                    })
+                    .catch(function errorCallback(response){
+                        // Something went wrong...
+                    });
             }
 
             function onClick (points, evt) {
@@ -379,7 +390,7 @@ angular.module('statistics')
                         {
                             id: 'y-axis-2',
                             type: 'linear',
-                            display: true,
+                            display: false,
                             position: 'right'
                         }
                     ]

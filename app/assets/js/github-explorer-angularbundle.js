@@ -1,5 +1,5 @@
 /*!
-* github-explorer - v0.0.1 - MIT LICENSE 2016-10-16. 
+* github-explorer - v0.0.1 - MIT LICENSE 2016-10-18. 
 * @author Les cours&#39;get
 */
 /**
