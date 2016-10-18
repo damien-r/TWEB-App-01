@@ -13,7 +13,7 @@ if (GITHUB_TOKEN === undefined) {
 }
 
 // Get uri to connect to mongo DB
-var MONGODB_URI = process.env.DB_URI;
+var MONGODB_URI = process.env.MONGODB_URI;
 if (MONGODB_URI === undefined) {
     console.log("DB_URI is undefined");
     process.exit(1);
