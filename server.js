@@ -200,10 +200,6 @@ function closeDBConnection(context) {
         });
 }
 
-// Define REST API for mongoDB
-
-
-
 app.set('port', (process.env.PORT || 4000));
 
 app.use(express.static(__dirname + '/'));
