@@ -95,13 +95,17 @@
                 vm.responseCallback = "Number of additions and deletions per week for " + response.data.repo + " repo.";
                 vm.labels = [];
                 vm.data = [[],[]];
+                console.log(response);
                 Array.prototype.forEach.call(response.data.stats, value => {
                     var date = new Date(value[0] * 1000);
                     vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
                     vm.data[0].push(value[1]);
                     vm.data[1].push(Math.abs(value[2]));
-                });
-                return response.data;
+                })
+                    .then(function(){
+                        return response.data;
+                    });
+                //return response.data;
             }
 
             function displayHistory(document) {
