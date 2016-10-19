@@ -273,8 +273,6 @@ angular.module('statistics')
         * Using function declarations
         * and bindable members up top.
         */
-
-
         function Statistics($http) {
             var IP_USER = "::1";
             var json = 'https://api.ipify.org?format=json';

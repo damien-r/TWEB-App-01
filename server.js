@@ -5,26 +5,51 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
-// Get Github Token from environment variable
+/*
+ *******************************************************
+ * Retrieve environment variable from server
+ *******************************************************
+ */
+// Get Github Token to authenticate to Github API
 var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 if (GITHUB_TOKEN === undefined) {
     console.log("GITHUB_TOKEN is undefined");
     process.exit(1);
 }
 
-// Get uri to connect to mongo DB
+// Get Github user agent to authenticate to Github API
+var GITHUB_USER_AGENT = process.env.GITHUB_USER_AGENT;
+if (GITHUB_USER_AGENT === undefined) {
+    console.log("GITHUB_USER_AGENT is undefined");
+    process.exit(1);
+}
+
+// Get uri to connect to mongo DB add-on
 var MONGODB_URI = process.env.MONGODB_URI;
 if (MONGODB_URI === undefined) {
     console.log("DB_URI is undefined");
     process.exit(1);
 }
 
-// Define REST API to get github token from angularjs app
-app.get('/api/github',function(req, res){
-    return res.json({ token: GITHUB_TOKEN });
+/**
+ *******************************************************
+ * Server configurations
+ *******************************************************
+ */
+app.set('port', (process.env.PORT || 4000));
+
+app.use(express.static(__dirname + '/'));
+
+app.listen(app.get('port'), function() {
+    console.log('The app is now running on port', app.get('port'));
 });
 
-// Get history of the last requests by a specific ip user
+/**
+ *******************************************************
+ * server REST API
+ *******************************************************
+ */
+// Get history of the last requested repo made by a specific ip user
 app.get('/api/history/:ipUser', function (req, res, next) {
 
     var context = {};
@@ -36,7 +61,6 @@ app.get('/api/history/:ipUser', function (req, res, next) {
             // success
             res.json(result.history);
         }).catch(function (error){
-            // error
             console.log("An error occured when trying to get history");
             next(error);
         }
@@ -44,7 +68,8 @@ app.get('/api/history/:ipUser', function (req, res, next) {
 
 });
 
-// Get github data from DB for a given id
+// Get github statistics from DB for a given id (this id corresponds
+// to ObjectId in mongoDB)
 app.get('/api/githubStats/:_id', function (req, res, next) {
     var context = {};
     context._id = req.params._id;
@@ -65,7 +90,7 @@ app.get('/api/githubStats/:_id', function (req, res, next) {
     });
 });
 
-// Get github data for a given username and repo
+// Get github statistics from github API for a given username and repo
 app.get('/api/githubStats/:username/:repo', function (req, res, next) {
 
     console.log(req.params.username + '/' + req.params.repo);
@@ -75,13 +100,15 @@ app.get('/api/githubStats/:username/:repo', function (req, res, next) {
     context.date = new Date();
     context.repo = req.params.username + "/" + req.params.repo;
     context.db_url = MONGODB_URI;
+
+    // Used for Github API
     context.options = {
         uri: 'https://api.github.com/repos/'+context.repo+'/stats/code_frequency',
         qs: {
             access_token: GITHUB_TOKEN
         },
         headers: {
-            'User-Agent': 'damienrochat/TWEB-App-01'
+            'User-Agent': GITHUB_USER_AGENT
         },
         json: true
     };
@@ -89,7 +116,7 @@ app.get('/api/githubStats/:username/:repo', function (req, res, next) {
     fetchAndSaveGithubStats(context)
         .then(function (result) {
             console.log("We are done:");
-            console.log(result);
+            console.log(result.stats);
             // Send Github stats
             var dataToSend = {};
             dataToSend._id = result._id;
@@ -102,6 +129,12 @@ app.get('/api/githubStats/:username/:repo', function (req, res, next) {
         next(error);
     });
 });
+
+/**
+ *******************************************************
+ * Functions
+ *******************************************************
+ */
 
 function getHistory(context) {
     return openDBConnection(context)
@@ -118,7 +151,6 @@ function fetchHistory(context) {
         .limit(7)
         .toArray()
         .then(function (documents){
-            console.log(documents);
             // Need to reverse to be consistent with data presentation
             context.history = documents.reverse();
             return context;
@@ -167,7 +199,6 @@ function fetchGithubStats(context) {
     return rp(context.options)
         .then(function (stats){
             console.log("Github stats fetched.");
-            console.log("stats: " + stats);
             context.stats = stats;
             return context;
         });
@@ -185,7 +216,6 @@ function saveGithubStats(context) {
             })
         .then(function(results){
             console.log("Github stats saved.");
-            console.log(results);
             context._id = results.insertedId;
             return context;
         });
@@ -199,11 +229,3 @@ function closeDBConnection(context) {
             return context;
         });
 }
-
-app.set('port', (process.env.PORT || 4000));
-
-app.use(express.static(__dirname + '/'));
-
-app.listen(app.get('port'), function() {
-    console.log('The app is now running on port', app.get('port'));
-});
