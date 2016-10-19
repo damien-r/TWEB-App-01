@@ -98,14 +98,14 @@
                 console.log(response);
                 Array.prototype.forEach.call(response.data.stats, value => {
                     var date = new Date(value[0] * 1000);
+                    // Push the date representing the week
                     vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
+                    // Push additions
                     vm.data[0].push(value[1]);
+                    // Push Deletions. Math.abs() for having positive values.
                     vm.data[1].push(Math.abs(value[2]));
-                })
-                    .then(function(){
-                        return response.data;
-                    });
-                //return response.data;
+                });
+                return response.data;
             }
 
             function displayHistory(document) {
