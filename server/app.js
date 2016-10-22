@@ -13,23 +13,28 @@ var assert = require('assert');
 // Get Github Token to authenticate to Github API
 var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 if (GITHUB_TOKEN === undefined) {
-    console.log("GITHUB_TOKEN is undefined");
-    process.exit(1);
+    GITHUB_TOKEN = ""; // TODO à remplir pour test en local
+    // console.log("GITHUB_TOKEN is undefined");
+    // process.exit(1);
 }
 
 // Get Github user agent to authenticate to Github API
 var GITHUB_USER_AGENT = process.env.GITHUB_USER_AGENT;
 if (GITHUB_USER_AGENT === undefined) {
-    console.log("GITHUB_USER_AGENT is undefined");
-    process.exit(1);
+    GITHUB_USER_AGENT = ""; // TODO à remplir pour test en local
+    // console.log("GITHUB_USER_AGENT is undefined");
+    // process.exit(1);
 }
 
 // Get uri to connect to mongo DB add-on
 var MONGODB_URI = process.env.MONGODB_URI;
 if (MONGODB_URI === undefined) {
-    console.log("DB_URI is undefined");
-    process.exit(1);
+    MONGODB_URI = "mongodb://192.168.99.100:27017/githubstats"; // pour test en local
+    // console.log("DB_URI is undefined");
+    // process.exit(1);
 }
+
+const GITHUB_API = "https://api.github.com"
 
 /**
  *******************************************************
@@ -38,7 +43,7 @@ if (MONGODB_URI === undefined) {
  */
 app.set('port', (process.env.PORT || 4000));
 
-app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/../'));
 
 app.listen(app.get('port'), function() {
     console.log('The app is now running on port', app.get('port'));
@@ -49,13 +54,18 @@ app.listen(app.get('port'), function() {
  * server REST API
  *******************************************************
  */
-// Get history of the last requested repo made by a specific ip user
-app.get('/api/history/:ipUser', function (req, res, next) {
+// test séparation composants
+// app.use('/api', require('./routes'));
+
+// Get history of the last requests made by a specific ip user
+app.get('/api/history', function (req, res, next) {
 
     var context = {};
-    context.ip_user = req.params.ipUser;
+    // Get ip from user
+    context.ip_user = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     context.db_url = MONGODB_URI;
 
+    console.log("ip user: " + context.ip_user);
     getHistory(context)
         .then(function (result){
             // success
@@ -70,7 +80,7 @@ app.get('/api/history/:ipUser', function (req, res, next) {
 
 // Get github statistics from DB for a given id (this id corresponds
 // to ObjectId in mongoDB)
-app.get('/api/githubStats/:_id', function (req, res, next) {
+app.get('/api/githubstats/:_id', function (req, res, next) {
     var context = {};
     context._id = req.params._id;
     context.db_url = MONGODB_URI;
@@ -82,7 +92,7 @@ app.get('/api/githubStats/:_id', function (req, res, next) {
             dataToSend._id = result._id;
             dataToSend.date = result.date;
             dataToSend.repo = result.repo;
-            dataToSend.stats = result.stats;
+            dataToSend.stats = result.data;
             res.json(dataToSend);
         }).catch(function (error){
         console.log("An error occured when trying to get data from mongoDB");
@@ -91,7 +101,7 @@ app.get('/api/githubStats/:_id', function (req, res, next) {
 });
 
 // Get github statistics from github API for a given username and repo
-app.get('/api/githubStats/:username/:repo', function (req, res, next) {
+app.get('/api/githubstats/:username/:repo', function (req, res, next) {
 
     console.log(req.params.username + '/' + req.params.repo);
 
@@ -103,7 +113,7 @@ app.get('/api/githubStats/:username/:repo', function (req, res, next) {
 
     // Used for Github API
     context.options = {
-        uri: 'https://api.github.com/repos/'+context.repo+'/stats/code_frequency',
+        uri: GITHUB_API + '/repos/'+context.repo+'/stats/code_frequency',
         qs: {
             access_token: GITHUB_TOKEN
         },
@@ -116,18 +126,42 @@ app.get('/api/githubStats/:username/:repo', function (req, res, next) {
     fetchAndSaveGithubStats(context)
         .then(function (result) {
             console.log("We are done:");
-            console.log(result.stats);
+            console.log(result.data);
             // Send Github stats
             var dataToSend = {};
             dataToSend._id = result._id;
             dataToSend.date = result.date;
             dataToSend.repo = result.repo;
-            dataToSend.stats = result.stats;
+            dataToSend.stats = result.data;
             res.json(dataToSend);
         }).catch(function (error) {
-        console.log("An error occured during the process.");
-        next(error);
-    });
+            console.log("An error occured during the process.");
+            next(error);
+        });
+});
+
+app.get('/api/repos/:username', function (req, res, next) {
+
+    var context = {};
+    // Used for Github API
+    context.options = {
+        uri: GITHUB_API + '/users/' + req.params.username + '/repos',
+        qs: {
+            access_token: GITHUB_TOKEN
+        },
+        headers: {
+            'User-Agent': GITHUB_USER_AGENT
+        },
+        json: true
+    };
+
+    fetchGithubData(context)
+        .then(function (result) {
+            res.json(result.data);
+        })
+        .catch(function (error) {
+            next(error);
+        })
 });
 
 /**
@@ -172,14 +206,14 @@ function getStatFromDB(context) {
             context._id = document._id;
             context.date = document.date;
             context.repo = document.repo;
-            context.stats = document.stats;
+            context.data = document.data;
             return context;
         })
 }
 
 function fetchAndSaveGithubStats(context) {
     return openDBConnection(context)
-        .then(fetchGithubStats)
+        .then(fetchGithubData)
         .then(saveGithubStats)
         .then(closeDBConnection);
 }
@@ -194,28 +228,32 @@ function openDBConnection(context) {
         });
 }
 
-function fetchGithubStats(context) {
-    console.log("Fetching github stats...");
+function fetchGithubData(context) {
+    console.log("Fetching github data...");
     return rp(context.options)
-        .then(function (stats){
-            console.log("Github stats fetched.");
-            context.stats = stats;
+        .then(function (data){
+            console.log("Github data fetched.");
+            // TODO : de temps a autre la reponse "bug"
+            // 'data' est juste un élément de type Object qui ne contient rien...
+            // Est-ce l'API github qui fonctionne mal ? ou le plugin 'request-promise' ?
+            console.log("------------------------------------after rp: " + data);
+            context.data = data;
             return context;
         });
 }
 
 function saveGithubStats(context) {
-    console.log("Saving github stats...");
+    console.log("Saving github data...");
     var collection = context.db.collection("githubstats");
     return collection.insertOne(
             {
                 ip_user: context.ip_user,
                 date: new Date(),
                 repo: context.repo,
-                stats: context.stats
+                data: context.data
             })
         .then(function(results){
-            console.log("Github stats saved.");
+            console.log("Github data saved.");
             context._id = results.insertedId;
             return context;
         });

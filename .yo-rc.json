@@ -15,6 +15,9 @@
       },
       {
         "name": "home"
+      },
+      {
+        "name": "testmodule"
       }
     ],
     "menu": [
@@ -29,6 +32,10 @@
       {
         "link": "home",
         "title": "Home"
+      },
+      {
+        "link": "testmodule",
+        "title": "Testmodule"
       }
     ]
   }

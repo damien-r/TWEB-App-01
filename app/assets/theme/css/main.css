@@ -3198,3 +3198,7 @@
 .warning {
     color: red;
 }
+
+.small-font {
+    font-size: 0.8em;
+}
