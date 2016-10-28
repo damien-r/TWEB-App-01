@@ -4,8 +4,8 @@
   "version": "0.0.1",
   "install": {
     "path": {
-      "js": "app/assets/libs",
-      "css": "app/assets/css"
+      "js": "app/assets/vendor",
+      "css": "app/assets/vendor"
     }
   },
   "dependencies": {

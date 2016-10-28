@@ -14,7 +14,7 @@ angular.module('explorer')
         $stateProvider
             .state('explorer', {
                 url:'/explorer',
-                templateUrl: 'app/modules/explorer/explorer.html',
+                templateUrl: 'modules/explorer/explorer.html',
                 controller: 'ExplorerCtrl',
                 controllerAs: 'vm'
             });

@@ -1,4 +1,4 @@
-# GitHub Explorer
+# Github Explorer
 
 ## Execute this app locally
 *Assuming you have Node installed*

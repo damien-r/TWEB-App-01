@@ -14,7 +14,7 @@ angular.module('home')
         $stateProvider
             .state('home', {
                 url:'/',
-                templateUrl: 'app/modules/home/home.html',
+                templateUrl: 'modules/home/home.html',
                 controller: 'HomeCtrl',
                 controllerAs: 'vm'
             });

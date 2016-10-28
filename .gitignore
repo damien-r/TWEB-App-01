@@ -1,5 +1,11 @@
+# Created by https://www.gitignore.io/api/bower,node,jetbrains
 
-# Created by https://www.gitignore.io/api/node,bower
+### Bower ###
+bower_components
+.bower-cache
+.bower-registry
+.bower-tmp
+
 
 ### Node ###
 # Logs
@@ -48,13 +54,61 @@ jspm_packages
 *.tgz
 
 
-### Bower ###
-bower_components
-.bower-cache
-.bower-registry
-.bower-tmp
+### JetBrains ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
+# Reference: https://intellij-support.jetbrains.com/hc/en-us/articles/206544839
 
-# Remove utility content #
-utils
+# User-specific stuff:
+.idea/workspace.xml
+.idea/tasks.xml
 
+# Sensitive or high-churn files:
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/dataSources.local.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# Gradle:
+.idea/gradle.xml
+.idea/libraries
+
+# Mongo Explorer plugin:
+.idea/mongoSettings.xml
+
+## File-based project format:
+*.iws
+
+## Plugin-specific files:
+
+# IntelliJ
+/out/
+
+# mpeltonen/sbt-idea plugin
+.idea_modules/
+
+# JIRA plugin
+atlassian-ide-plugin.xml
+
+# Crashlytics plugin (for Android Studio and IntelliJ)
+com_crashlytics_export_strings.xml
+crashlytics.properties
+crashlytics-build.properties
+fabric.properties
+
+### JetBrains Patch ###
+# Comment Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-215987721
+
+# *.iml
+# modules.xml
+# .idea/misc.xml 
+# *.ipr
+
+
+
+# Project specific files
 .env
+app/assets/app/*
+app/assets/vendor/*
+

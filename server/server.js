@@ -5,8 +5,6 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
-console.log(process.env);
-
 /*
  *******************************************************
  * Retrieve environment variable from server
@@ -42,7 +40,7 @@ const GITHUB_API = "https://api.github.com"
  */
 app.set('port', (process.env.PORT || 4000));
 
-app.use(express.static(__dirname + '/../'));
+app.use(express.static(__dirname + '/../app/'));
 
 app.listen(app.get('port'), function() {
     console.log('The app is now running on port', app.get('port'));

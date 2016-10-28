@@ -1,7 +1,7 @@
 // Grunt tasks
 
 module.exports = function (grunt) {
-    "use strict";
+    'use strict';
 
     // Project configuration.
     grunt.initConfig({
@@ -11,10 +11,6 @@ module.exports = function (grunt) {
         '* <%= pkg.name %> - v<%= pkg.version %> - MIT LICENSE <%= grunt.template.today("yyyy-mm-dd") %>. \n' +
         '* @author <%= pkg.author %>\n' +
         '*/\n',
-
-        clean: {
-            dist: ['src']
-        },
 
         jshint: {
             options: {
@@ -28,9 +24,9 @@ module.exports = function (grunt) {
             }
         },
 
-        /*exec: {
+        exec: {
             bowerInstaller: 'bower-installer'
-        },*/
+        },
 
         concat: {
             options: {
@@ -48,18 +44,18 @@ module.exports = function (grunt) {
                     'app/modules/**/*Service.js',
                     'app/modules/**/*Directive.js'
                 ],
-                dest: 'app/assets/js/<%= pkg.name %>-appbundle.js'
+                dest: 'app/assets/app/js/<%= pkg.name %>-app.js'
             },
             build: {
                 src: [
                     // Angular Project Dependencies,
-                    'app/assets/libs/angular/angular.js',
-                    'app/assets/libs/chart.js/Chart.js', // Hack to include chart.js before angulare-chart.js
-                    'app/assets/libs/**/*.js',
-                    '!app/assets/libs/*.*' // Hack to exclude folder containing a dot (like Chart.js and angular-chart.js)
+                    'app/assets/vendor/angular/angular.js',
+                    'app/assets/vendor/chart.js/Chart.js', // Hack to include chart.js before angulare-chart.js
+                    'app/assets/vendor/**/*.js',
+                    '!app/assets/vendor/*.*' // Hack to exclude folder containing a dot (like Chart.js and angular-chart.js)
 
                 ],
-                dest: 'app/assets/js/<%= pkg.name %>-angularbundle.js'
+                dest: 'app/assets/app/js/<%= pkg.name %>-vendor.js'
             }
         },
 
@@ -70,11 +66,11 @@ module.exports = function (grunt) {
             },
             base: {
                 src: ['<%= concat.base.dest %>'],
-                dest: 'app/assets/js/<%= pkg.name %>-angscript.min.js'
+                dest: 'app/assets/app/js/<%= pkg.name %>-angscript.min.js'
             },
             basePlugin: {
                 src: [ 'src/plugins/**/*.js' ],
-                dest: 'app/assets/js/plugins/',
+                dest: 'app/assets/app/js/plugins/',
                 expand: true,
                 flatten: true,
                 ext: '.min.js'
@@ -123,11 +119,16 @@ module.exports = function (grunt) {
         },
 
         injector: {
-            options: {},
+            options: {
+                ignorePath: 'app/'
+            },
             dev: {
                 files: {
-                    'index.html': [
-                        'bower.json',
+                    'app/index.html': [
+                        'app/assets/vendor/angular/angular.js',
+                        'app/assets/vendor/chart.js/Chart.js', // Hack to include chart.js before angulare-chart.js
+                        'app/assets/vendor/**/*.js',
+                        '!app/assets/vendor/*.*', // Hack to exclude folder containing a dot (like Chart.js and angular-chart.js)
                         'app/app.js',
                         'app/app.config.js',
                         'app/**/*Module.js',
@@ -140,9 +141,11 @@ module.exports = function (grunt) {
             },
             production: {
                 files: {
-                    'index.html': [
-                        'app/assets/css/**/*.css',
-                        'app/assets/js/*.js'
+                    'app/index.html': [
+                        'app/assets/app/css/*.css',
+                        'app/assets/app/js/*vendor.js',
+                        'app/assets/app/js/*app.js',
+                        'app/assets/app/js/*.js'
                     ]
 
                 }
@@ -152,7 +155,7 @@ module.exports = function (grunt) {
         ngtemplates: {
             app: {
                 src: 'app/modules/**/*.html',
-                dest: 'app/assets/js/templates.js',
+                dest: 'app/assets/app/js/templates.js',
                 options: {
                     module: '<%= pkg.name %>',
                     root: 'app/',
@@ -172,12 +175,11 @@ module.exports = function (grunt) {
     // Register grunt tasks
     grunt.registerTask('build', [
         'jshint',
-        //'exec',
+        'exec',
         'concat',
         'ngtemplates',
-        'injector:production',
-        //'concurrent',
-        'clean'
+        'injector:production'/*,
+        'concurrent'*/
     ]);
     grunt.registerTask('serve-build', [
         'build',
@@ -187,6 +189,7 @@ module.exports = function (grunt) {
 
     // Development tasks
     grunt.registerTask('dev', [
+        'exec',
         'injector:dev'/*,
         'concurrent'*/
     ]);
