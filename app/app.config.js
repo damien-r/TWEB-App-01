@@ -9,11 +9,9 @@
      * Configutation of the app
      */
 
-
     angular
         .module('github-explorer')
-        .config(configure)
-        .run(runBlock);
+        .config(configure);
 
     configure.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
 
@@ -24,18 +22,9 @@
         // This is required for Browser Sync to work poperly
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+        // Default route
+        $urlRouterProvider.otherwise('/');
 
-        $urlRouterProvider
-            .otherwise('/');
-
-    }
-
-    runBlock.$inject = ['$rootScope'];
-
-    function runBlock($rootScope) {
-        'use strict';
-
-        console.log('AngularJS run() function...');
     }
 
 })();

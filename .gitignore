@@ -56,3 +56,5 @@ bower_components
 
 # Remove utility content #
 utils
+
+.env

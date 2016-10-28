@@ -18,8 +18,7 @@
         'ngSanitize',
         'ui.router',
         'home',
-        'explorer',
-        'statistics'
-	]);
+        'explorer'
+   	]);
 
 })();

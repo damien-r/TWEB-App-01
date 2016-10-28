@@ -1,20 +1,20 @@
 /*!
-* github-explorer - v0.0.1 - MIT LICENSE 2016-10-19. 
+* github-explorer - v0.0.1 - MIT LICENSE 2016-10-28. 
 * @author Les cours&#39;get
 */
 (function() {
-    'use strict';
+	'use strict';
 
-    /**
-     * @ngdoc index
-     * @name app
-     * @description
-     * # app
-     *
-     * Main modules of the application.
-     */
+	/**
+	 * @ngdoc index
+	 * @name app
+	 * @description
+	 * # app
+	 *
+	 * Main modules of the application.
+	 */
 
-    angular.module('github-explorer', [
+	angular.module('github-explorer', [
         'ngResource',
         'ngAria',
         'ngCookies',
@@ -22,11 +22,11 @@
         'ngSanitize',
         'ui.router',
         'home',
-        'explorer',
-        'statistics',
-    ]);
+        'explorer'
+   	]);
 
 })();
+
 (function () {
     'use strict';
 
@@ -38,11 +38,9 @@
      * Configutation of the app
      */
 
-
     angular
         .module('github-explorer')
-        .config(configure)
-        .run(runBlock);
+        .config(configure);
 
     configure.$inject = ['$stateProvider', '$urlRouterProvider', '$locationProvider', '$httpProvider'];
 
@@ -53,18 +51,9 @@
         // This is required for Browser Sync to work poperly
         $httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+        // Default route
+        $urlRouterProvider.otherwise('/');
 
-        $urlRouterProvider
-            .otherwise('/');
-
-    }
-
-    runBlock.$inject = ['$rootScope'];
-
-    function runBlock($rootScope) {
-        'use strict';
-
-        console.log('AngularJS run() function...');
     }
 
 })();
@@ -80,7 +69,7 @@
      * Module of the app
      */
 
-    angular.module('explorer', []);
+    angular.module('explorer', ['chart.js']);
 
 })();
 
@@ -99,28 +88,13 @@
 
 })();
 
-(function () {
-    'use strict';
-
-    /**
-     * @ngdoc function
-     * @name app.module:statisticsModule
-     * @description
-     * # statisticsModule
-     * Module of the app
-     */
-
-    angular.module('statistics', ['chart.js']);
-
-})();
-
 'use strict';
 
 /**
  * @ngdoc function
  * @name app.route:explorerRoute
  * @description
- * # explorerRoute
+ * # explorerModuleRoute
  * Route of the app
  */
 
@@ -162,58 +136,227 @@ angular.module('home')
         
     }]);
 
-'use strict';
-
-/**
- * @ngdoc function
- * @name app.route:statisticsRoute
- * @description
- * # statisticsRoute
- * Route of the app
- */
-
-angular.module('statistics')
-    .config(['$stateProvider', function ($stateProvider) {
-        
-        $stateProvider
-            .state('statistics', {
-                url:'/statistics',
-                templateUrl: 'app/modules/statistics/statistics.html',
-                controller: 'StatisticsCtrl',
-                controllerAs: 'vm'
-            });
-
-        
-    }]);
-
 (function() {
     'use strict';
 
     /**
-    * @ngdoc function
-    * @name app.controller:explorerCtrl
-    * @description
-    * # explorerCtrl
-    * Controller of the app
-    */
-
+     * @ngdoc function
+     * @name app.controller:explorerCtrl
+     * @description
+     * # explorerCtrl
+     * Controller of the app
+     */
     angular
         .module('explorer')
         .controller('ExplorerCtrl', Explorer);
 
-        Explorer.$inject = [];
+    Explorer.$inject = ['historyservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
 
-        /*
-        * recommend
-        * Using function declarations
-        * and bindable members up top.
-        */
+    /*
+    * recommend
+    * Using function declarations
+    * and bindable members up top.
+    */
+    function Explorer(historyservice,
+                        githubstatsservice,
+                        storedstatsservice,
+                        reposservice) {
 
-        function Explorer() {
-            /*jshint validthis: true */
-            var vm = this;
 
+        /*jshint validthis: true */
+        var vm = this;
+
+        // Variables for displaying the graph
+        vm.labels = [];
+        vm.series = ['Additions', 'Deletions'];
+        vm.data = [[],[]];
+        vm.datasetOverride = undefined;
+        vm.options = undefined;
+        vm.onClick = onClick;
+
+        // Variables for user interactions
+        vm.userName = undefined;
+        vm.userNameError = undefined;
+        vm.repoName = undefined;
+        vm.repoNameError = undefined;
+        vm.responseCallback = undefined;
+        vm.watchStats = watchStatsFromGithub; // Function call on user event
+        vm.displayStatsFromDB = displayStatsFromDB; // Function call on user event
+        vm.history = [];
+        vm.repos = [];
+        vm.getRepos = getReposFromUser;
+        vm.emptyRepos = function () { vm.repos = []; };
+
+        // Run this function when the page loads
+        activate();
+
+        function activate() {
+            getRequestsHistory().then(function() {
+                console.log("Activated history view");
+            });
         }
+
+        function getRequestsHistory() {
+            return historyservice
+                .getRequestsHistory()
+                .then(function(data) {
+                    Array.prototype.forEach.call(data, value => {
+                        displayHistory(value);
+                    });
+                });
+        }
+
+        function getReposFromUser(username) {
+            if (username) {
+                reposservice.getRepos(username)
+                    .then(function(data) {
+                        vm.repos = [];
+                        Array.prototype.forEach.call(data, repo => {
+                            vm.repos.push(repo.name);
+                        });
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    });
+            }
+        }
+
+        /**
+         * This function call a service to retrieve data from Github API
+         * for the given username and repository. It has a chain of promises
+         * to display it and catch eventually errors
+         * @param username is the github username provided by the user
+         * @param repo is the github repo associated to the username. Also
+         * provided by the user
+         */
+        function watchStatsFromGithub(username, repo) {
+
+            // Check if the fields are filled
+            var error = false;
+            if (!username) {
+                vm.userNameError = "You must provide a github username";
+                error = true;
+            }
+            if (!repo) {
+                vm.repoNameError = "You must provide a github repository name";
+                error = true;
+            }
+
+            if (!error) {
+                // No error at this stage, Let's try to get github data
+                vm.userNameError = vm.repoNameError = undefined;
+                vm.responseCallback = undefined;
+
+                // Call of our service to get github data
+                githubstatsservice.getGithubStats(username, repo)
+                    .then(displayStats)
+                    .then(displayHistory)
+                    .catch(gettingStatsFailed);
+            }
+            else {
+                // Empty the graph if an error has occurred.
+                // This is useful when the graph was already displayed when
+                // the error occurred
+                vm.labels = [];
+                vm.data = [[],[]];
+            }
+        }
+
+        /**
+         * Display stats for a given id. This id represents a document
+         * in a mongoDB collection.
+         * @param id
+         */
+        function displayStatsFromDB(id) {
+            storedstatsservice
+                .getStoredStats(id)
+                .then(displayStats)
+                .catch(gettingStatsFailed);
+        }
+
+        /**
+         * Display statistics stored in the data parameter
+         * @param data is a JSON payload. data.stats is an array where each cell
+         * contains the github repository name, the number of deletions and
+         * additions per week for this repo and the date of the week
+         */
+        function displayStats(data) {
+            vm.responseCallback = "Number of additions and deletions per week for " +
+                data.repo + " repo.";
+            console.log(data);
+
+            // Ensure that current vm variables are empty
+            vm.labels = [];
+            vm.data = [[],[]];
+
+            Array.prototype.forEach.call(data.stats, value => {
+
+                // Push the date representing the week in DD/MM/YYYY format
+                var date = new Date(value[0] * 1000);
+                vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
+
+                // Push additions
+                vm.data[0].push(value[1]);
+
+                // Push Deletions.
+                // Math.abs() is for having positive values on the graph
+                vm.data[1].push(Math.abs(value[2]));
+            });
+
+            return data;
+        }
+
+        /**
+         * Store the requested github stats in the vm.history variable.
+         * Angular will manage to display it for the user.
+         * @param document is the requested github stats to store. It has
+         * a JSON format.
+         */
+        function displayHistory(document) {
+            vm.history.push({ _id: document._id, date: document.date, repo: document.repo });
+        }
+
+        /**
+         * This function is called when an error occurred during the fetch
+         * github stats' process.
+         * The most common error is that the repository the user requested
+         * is not valid (it doesn't exist).
+         * @param error is the error to display
+         */
+        function gettingStatsFailed(error) {
+            console.log("gettingStatsFailed");
+            console.log(error);
+            vm.labels = [];
+            vm.data = [[],[]];
+            vm.responseCallback = "error " + error.status + " " + error.statusText +
+                " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
+        }
+
+        // Configurations for managing the graph
+        // Source : https://jtblin.github.io/angular-chart.js/#line-chart
+        function onClick (points, evt) {
+            console.log(points, evt);
+        }
+        vm.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
+        vm.options = {
+            scales: {
+                yAxes: [
+                    {
+                        id: 'y-axis-1',
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                    },
+                    {
+                        id: 'y-axis-2',
+                        type: 'linear',
+                        display: false,
+                        position: 'right'
+                    }
+                ]
+            }
+        };
+    }
 
 })();
 
@@ -255,156 +398,6 @@ angular.module('statistics')
 (function() {
     'use strict';
 
-        Statistics.$inject = ['$http'];
-
-    /**
-     * @ngdoc function
-     * @name app.controller:statisticsCtrl
-     * @description
-     * # statisticsCtrl
-     * Controller of the app
-     */
-    angular
-        .module('statistics')
-        .controller('StatisticsCtrl', Statistics);
-
-        /*
-        * recommend
-        * Using function declarations
-        * and bindable members up top.
-        */
-        function Statistics($http) {
-            var IP_USER = "::1";
-            var json = 'https://api.ipify.org?format=json';
-            $http.get(json).then(function(result) {
-                IP_USER = result.data.ip;
-            }, function(e) {
-                // We will consider that user is on localhsot
-                // and won't display error
-            });
-            fetchHistory(IP_USER);
-
-            /*jshint validthis: true */
-            var vm = this;
-
-            vm.labels = [];
-            vm.series = ['Additions', 'Deletions'];
-            vm.data = [[],[]];
-            vm.userName = undefined;
-            vm.userNameError = undefined;
-            vm.repoName = undefined;
-            vm.repoNameError = undefined;
-            vm.responseCallback = undefined;
-            vm.watchStats = watchStatsFromGithub;
-            vm.onClick = onClick;
-            vm.datasetOverride = undefined;
-            vm.options = undefined;
-            vm.displayStatsFromDB = displayStatsFromDB;
-            vm.history = [];
-
-            // This function is called when the user gives a username and a
-            // repo name.
-            function watchStatsFromGithub(username, repo) {
-                var error = false;
-                if (!username) {
-                    vm.userNameError = "You must provide a github username";
-                    error = true;
-                }
-                if (!repo) {
-                    vm.repoNameError = "You must provide a github repository name";
-                    error = true;
-                }
-
-                if (!error) {
-                    vm.userNameError = vm.repoNameError = undefined;
-                    vm.responseCallback = undefined;
-
-                    // API call to get data of a given repository
-                    $http.get('/api/githubStats/' + username + "/" + repo)
-                        .then(displayStats)
-                        .then(displayHistory)
-                        .catch(function errorCallback(response){
-                            vm.labels = [];
-                            vm.data = [[],[]];
-                            vm.responseCallback = "error " + response.status + " " + response.statusText +
-                                " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
-                        });
-                } else {
-                    vm.labels = [];
-                    vm.data = [[],[]];
-                }
-            }
-
-            // Display stats of a given id. This id represents a document
-            // in a mongoDB collection.
-            function displayStatsFromDB(id) {
-                $http.get('/api/githubStats/' + id)
-                    .then(displayStats);
-            }
-
-            // Display statistics stored in the response parameter
-            function displayStats(response) {
-                vm.responseCallback = "Number of additions and deletions per week for " + response.data.repo + " repo.";
-                vm.labels = [];
-                vm.data = [[],[]];
-                console.log(response);
-                Array.prototype.forEach.call(response.data.stats, value => {
-                    var date = new Date(value[0] * 1000);
-                    // Push the date representing the week
-                    vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
-                    // Push additions
-                    vm.data[0].push(value[1]);
-                    // Push Deletions. Math.abs() for having positive values.
-                    vm.data[1].push(Math.abs(value[2]));
-                });
-                return response.data;
-            }
-
-            function displayHistory(document) {
-                vm.history.push({_id: document._id, date: document.date, repo: document.repo});
-            }
-
-            function fetchHistory(ipUser) {
-                $http.get('/api/history/' + ipUser)
-                    .then(function successCallback(response){
-                        Array.prototype.forEach.call(response.data, value => {
-                            displayHistory(value);
-                        });
-                    })
-                    .catch(function errorCallback(response){
-                        // Something went wrong...
-                    });
-            }
-
-            function onClick (points, evt) {
-                console.log(points, evt);
-            }
-            vm.datasetOverride = [{ yAxisID: 'y-axis-1' }, { yAxisID: 'y-axis-2' }];
-            vm.options = {
-                scales: {
-                    yAxes: [
-                        {
-                            id: 'y-axis-1',
-                            type: 'linear',
-                            display: true,
-                            position: 'left',
-                        },
-                        {
-                            id: 'y-axis-2',
-                            type: 'linear',
-                            display: false,
-                            position: 'right'
-                        }
-                    ]
-                }
-            };
-        }
-
-})();
-
-(function() {
-    'use strict';
-
     /**
      * @ngdoc function
      * @name app.service:explorerService
@@ -415,16 +408,100 @@ angular.module('statistics')
 
     angular
         .module('explorer')
-        .factory('ExplorerService', Explorer);
+        .factory('historyservice', historyservice)
+        .factory('githubstatsservice', githubstatsservice)
+        .factory('storedstatsservice', storedstatsservice)
+        .factory('reposservice', reposservice);
         // Inject your dependencies as .$inject = ['$http', 'someSevide'];
         // function Name ($http, someSevide) {...}
 
-        Explorer.$inject = ['$http'];
+        historyservice.$inject = ['$http'];
+        githubstatsservice.$inject = ['$http'];
+        storedstatsservice.$inject = ['$http'];
+        reposservice.$inject = ['$http'];
 
-        function Explorer ($http) {
+        function historyservice ($http) {
+            return {
+                getRequestsHistory: getRequestsHistory
+            };
 
+            function getRequestsHistory() {
+                return $http.get('/api/history')
+                    .then(getHistoryComplete)
+                    .catch(getHistoryFailed);
+
+                function getHistoryComplete(response) {
+                    return response.data;
+                }
+
+                function getHistoryFailed(error) {
+                    console.log('Failed requesting history.' + error.data);
+                    throw error;
+                }
+            }
         }
 
+        function githubstatsservice ($http) {
+            return {
+                getGithubStats: getGithubStats
+            };
+
+            function getGithubStats(username, repo) {
+                return $http.get('/api/githubstats/' + username + '/' + repo)
+                    .then(getGithubStatsComplete)
+                    .catch(getGithubStatsFailed);
+
+                function getGithubStatsComplete(response) {
+                    return response.data;
+                }
+
+                function getGithubStatsFailed(error) {
+                    console.log("Failed getting github stats for "+username+"/"+repo);
+                    throw error;
+                }
+            }
+        }
+
+        function storedstatsservice($http) {
+            return {
+                getStoredStats: getStoredStats
+            };
+
+            function getStoredStats(id) {
+                return $http.get('/api/githubStats/' + id)
+                    .then(getStoredStatsComplete)
+                    .catch(getStoredStatsFailed);
+
+                function getStoredStatsComplete(response) {
+                    return response.data;
+                }
+
+                function getStoredStatsFailed(error) {
+                    console.log("Faileld getting stats from DB.");
+                    throw error;
+                }
+            }
+        }
+
+        function reposservice($http) {
+            return {
+                getRepos: getRepos
+            };
+
+            function getRepos(username) {
+                return $http.get('/api/repos/' + username)
+                    .then(getReposComplete)
+                    .catch(getReposFailed);
+
+                function getReposComplete(response) {
+                    return response.data;
+                }
+                function getReposFailed(error) {
+                    console.log("Faileld getting repos from user " + username);
+                    throw error;
+                }
+            }
+        }
 })();
 
 (function() {
@@ -447,31 +524,6 @@ angular.module('statistics')
         Home.$inject = [];
 
         function Home () {
-
-        }
-
-})();
-
-(function() {
-    'use strict';
-
-    /**
-     * @ngdoc function
-     * @name app.service:statisticsService
-     * @description
-     * # statisticsService
-     * Service of the app
-     */
-
-    angular
-        .module('statistics')
-        .factory('StatisticsService', Statistics);
-        // Inject your dependencies as .$inject = ['$http', 'someSevide'];
-        // function Name ($http, someSevide) {...}
-
-        Statistics.$inject = ['$http'];
-
-        function Statistics ($http) {
 
         }
 
