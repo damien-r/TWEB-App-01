@@ -8,9 +8,7 @@
     "npm": "1.4.x"
   },
   "scripts": {
-    "build": "grunt build",
-    "start": "node server/server.js",
-    "postinstall": "npm run build"
+    "start": "node server/server.js"
   },
   "dependencies": {
     "async": "~0.9.0",

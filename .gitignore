@@ -109,5 +109,3 @@ fabric.properties
 
 # Project specific files
 .env
-app/assets/app/*
-app/assets/vendor/*
