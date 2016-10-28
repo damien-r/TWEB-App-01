@@ -5,6 +5,8 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var assert = require('assert');
 
+console.log(process.env);
+
 /*
  *******************************************************
  * Retrieve environment variable from server
@@ -13,25 +15,22 @@ var assert = require('assert');
 // Get Github Token to authenticate to Github API
 var GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 if (GITHUB_TOKEN === undefined) {
-    GITHUB_TOKEN = ""; // TODO à remplir pour test en local
-    // console.log("GITHUB_TOKEN is undefined");
-    // process.exit(1);
+    console.log("GITHUB_TOKEN is required !");
+    process.exit(1);
 }
 
 // Get Github user agent to authenticate to Github API
 var GITHUB_USER_AGENT = process.env.GITHUB_USER_AGENT;
 if (GITHUB_USER_AGENT === undefined) {
-    GITHUB_USER_AGENT = ""; // TODO à remplir pour test en local
-    // console.log("GITHUB_USER_AGENT is undefined");
-    // process.exit(1);
+    console.log("GITHUB_USER_AGENT is required !");
+    process.exit(1);
 }
 
 // Get uri to connect to mongo DB add-on
 var MONGODB_URI = process.env.MONGODB_URI;
 if (MONGODB_URI === undefined) {
-    MONGODB_URI = "mongodb://192.168.99.100:27017/githubstats"; // pour test en local
-    // console.log("DB_URI is undefined");
-    // process.exit(1);
+    console.log("DB_URI is required !");
+    process.exit(1);
 }
 
 const GITHUB_API = "https://api.github.com"

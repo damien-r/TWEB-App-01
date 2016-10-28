@@ -9,6 +9,6 @@
      * Module of the app
      */
 
-    angular.module('explorer', []);
+    angular.module('explorer', ['chart.js']);
 
 })();

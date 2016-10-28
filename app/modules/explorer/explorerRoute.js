@@ -4,7 +4,7 @@
  * @ngdoc function
  * @name app.route:explorerRoute
  * @description
- * # explorerRoute
+ * # explorerModuleRoute
  * Route of the app
  */
 
