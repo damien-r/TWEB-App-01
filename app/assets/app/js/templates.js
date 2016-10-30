@@ -12,7 +12,7 @@ angular.module('github-explorer').run(['$templateCache', function($templateCache
     "\n" +
     "<section class=\"wrapper style4 special container\">\n" +
     "    <div class=\"row\">\n" +
-    "        <div class=\"6u 12u(narrower)\">\n" +
+    "        <div class=\"12u\">\n" +
     "            <section>\n" +
     "                <header>\n" +
     "                    <h3>Provide the data</h3>\n" +
@@ -24,7 +24,7 @@ angular.module('github-explorer').run(['$templateCache', function($templateCache
     "                            <small class=\"warning\">{{ vm.userNameError }}</small>\n" +
     "                        </div>\n" +
     "                        <div class=\"6u 12u(mobile)\">\n" +
-    "                            <input list=\"repositories\" ng-model=\"vm.repoName\" ng-disabled=\"vm.selectDisabled\" type=\"text\" id=\"repositories-choices\" placeholder=\"Select repository\">\n" +
+    "                            <input list=\"repositories\" ng-model=\"vm.repoName\" type=\"text\" id=\"repositories-choices\" placeholder=\"Select repository\">\n" +
     "                            <datalist id=\"repositories\">\n" +
     "                                <option ng-repeat=\"repo in vm.repos\" value=\"{{ repo }}\">\n" +
     "                            </datalist>\n" +
@@ -42,30 +42,6 @@ angular.module('github-explorer').run(['$templateCache', function($templateCache
     "            </section>\n" +
     "\n" +
     "        </div>\n" +
-    "        <div class=\"6u 12u(narrower)\">\n" +
-    "\n" +
-    "            <section>\n" +
-    "                <header>\n" +
-    "                    <h3>Your history</h3>\n" +
-    "                </header>\n" +
-    "                <!--<p>Select a github repo in the list</p>-->\n" +
-    "                <!-- TODO: ng-repeat -->\n" +
-    "                <ul class=\"small-font\">\n" +
-    "                    <li ng-repeat=\"history in vm.history | orderBy:vm.date:true | limitTo:7\">\n" +
-    "                        {{ history.date | date:\"dd/MM/yyyy 'at' hh:mma\" }} -\n" +
-    "                        <a href=\"\" ng-click=\"vm.displayStatsFromDB(history._id)\">\n" +
-    "                            {{ history.repo}}\n" +
-    "                        </a>\n" +
-    "                    </li>\n" +
-    "                </ul>\n" +
-    "                <!--\n" +
-    "                <select>\n" +
-    "                    <option value=\"volvo\">No queries for now</option>\n" +
-    "                </select>\n" +
-    "                -->\n" +
-    "            </section>\n" +
-    "\n" +
-    "        </div>\n" +
     "    </div>\n" +
     "\n" +
     "\n" +
@@ -77,6 +53,45 @@ angular.module('github-explorer').run(['$templateCache', function($templateCache
     "                chart-click=\"vm.onClick\" chart-colors=\"vm.colors\">\n" +
     "        </canvas>\n" +
     "    </div>\n" +
+    "\n" +
+    "    <div class=\"row\">\n" +
+    "        <div class=\"6u 12u(narrower)\">\n" +
+    "\n" +
+    "            <section>\n" +
+    "                <header>\n" +
+    "                    <h3>Your history</h3>\n" +
+    "                </header>\n" +
+    "                <ul class=\"small-font\">\n" +
+    "                    <li ng-repeat=\"history in vm.history | orderBy:vm.date:true | limitTo:7\">\n" +
+    "                        {{ history.date | date:\"dd/MM/yyyy 'at' hh:mma\" }} -\n" +
+    "                        <a href=\"\" ng-click=\"vm.displayStatsFromDB(history._id)\">\n" +
+    "                            {{ history.repo}}\n" +
+    "                        </a>\n" +
+    "                    </li>\n" +
+    "                </ul>\n" +
+    "            </section>\n" +
+    "\n" +
+    "        </div>\n" +
+    "        <div class=\"6u 12u(narrower)\">\n" +
+    "\n" +
+    "            <section>\n" +
+    "                <header>\n" +
+    "                    <h3>Trends</h3>\n" +
+    "                </header>\n" +
+    "                <ul class=\"small-font\">\n" +
+    "                    <li ng-repeat=\"entry in vm.trends\">\n" +
+    "                        #{{$index + 1}}\n" +
+    "                        <a href=\"\" ng-click=\"vm.watchStatsFromTrends(entry.repo)\">\n" +
+    "                            {{entry.repo}}\n" +
+    "                        </a>\n" +
+    "                        ({{entry.count}} searches)\n" +
+    "                    </li>\n" +
+    "                </ul>\n" +
+    "            </section>\n" +
+    "\n" +
+    "        </div>\n" +
+    "    </div>\n" +
+    "\n" +
     "</section>\n"
   );
 

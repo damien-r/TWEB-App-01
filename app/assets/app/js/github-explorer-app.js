@@ -1,5 +1,5 @@
 /*!
-* github-explorer - v0.0.1 - MIT LICENSE 2016-10-29. 
+* github-explorer - v0.0.1 - MIT LICENSE 2016-10-30. 
 * @author Les courgettes
 */
 (function() {
@@ -150,7 +150,7 @@ angular.module('home')
         .module('explorer')
         .controller('ExplorerCtrl', Explorer);
 
-    Explorer.$inject = ['historyservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
+    Explorer.$inject = ['historyservice', 'trendsservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
 
     /*
     * recommend
@@ -158,6 +158,7 @@ angular.module('home')
     * and bindable members up top.
     */
     function Explorer(historyservice,
+                        trendsservice,
                         githubstatsservice,
                         storedstatsservice,
                         reposservice) {
@@ -180,10 +181,12 @@ angular.module('home')
         vm.repoName = undefined;
         vm.repoNameError = undefined;
         vm.responseCallback = undefined;
-        vm.watchStats = watchStatsFromGithub; // Function call on user event
+        vm.watchStats = watchStatsFromGithubByUserAndRepo; // Function call on user event
+        vm.watchStatsFromTrends = watchStatsFromGithub; // Function call on user event
         vm.displayStatsFromDB = displayStatsFromDB; // Function call on user event
         vm.history = [];
         vm.repos = [];
+        vm.trends = [];
         vm.getRepos = getReposFromUser;
         vm.emptyRepos = function () { vm.repos = []; };
 
@@ -194,14 +197,32 @@ angular.module('home')
             getRequestsHistory().then(function() {
                 console.log("Activated history view");
             });
+            getTrends().then(function() {
+                console.log("Activated trends view");
+            });
         }
 
         function getRequestsHistory() {
+            vm.history = [];
             return historyservice
                 .getRequestsHistory()
                 .then(function(data) {
                     Array.prototype.forEach.call(data, value => {
                         displayHistory(value);
+                    });
+                })
+                .catch(function(error){
+                    gettingStatsFailed(error);
+                });
+        }
+
+        function getTrends() {
+            vm.trends = [];
+            return trendsservice
+                .getTrends()
+                .then(function(data) {
+                    Array.prototype.forEach.call(data, value => {
+                        displayTrend(value);
                     });
                 });
         }
@@ -216,29 +237,27 @@ angular.module('home')
                         });
                     })
                     .catch(function(error){
-                        console.log(error);
+                        displayError(error);
                     });
             }
         }
 
         /**
          * This function call a service to retrieve data from Github API
-         * for the given username and repository. It has a chain of promises
-         * to display it and catch eventually errors
-         * @param username is the github username provided by the user
-         * @param repo is the github repo associated to the username. Also
-         * provided by the user
+         * for the given repository.
+         * @param repo is the github user.
+         * @param repo is the github repo associated to the user.
          */
-        function watchStatsFromGithub(username, repo) {
+        function watchStatsFromGithubByUserAndRepo(user, repo) {
 
             // Check if the fields are filled
             var error = false;
-            if (!username) {
-                vm.userNameError = "You must provide a github username";
+            if (!vm.userName) {
+                vm.userNameError = "You must provide a github user";
                 error = true;
             }
-            if (!repo) {
-                vm.repoNameError = "You must provide a github repository name";
+            if (!vm.repoName) {
+                vm.repoNameError = "You must provide a github repository";
                 error = true;
             }
 
@@ -246,12 +265,10 @@ angular.module('home')
                 // No error at this stage, Let's try to get github data
                 vm.userNameError = vm.repoNameError = undefined;
                 vm.responseCallback = undefined;
+                vm.errorMessage = undefined;
 
                 // Call of our service to get github data
-                githubstatsservice.getGithubStats(username, repo)
-                    .then(displayStats)
-                    .then(displayHistory)
-                    .catch(gettingStatsFailed);
+                watchStatsFromGithub(user + '/' + repo);
             }
             else {
                 // Empty the graph if an error has occurred.
@@ -260,6 +277,20 @@ angular.module('home')
                 vm.labels = [];
                 vm.data = [[],[]];
             }
+        }
+
+        /**
+         * This function call a service to retrieve data from Github API
+         * for the given repository.
+         * @param repo is the github repo.
+         */
+        function watchStatsFromGithub(repo) {
+            githubstatsservice.getGithubStats(repo)
+                .then(displayStats)
+                .then(displayHistory)
+                .then(getTrends)
+                .then(getRequestsHistory)
+                .catch(gettingStatsFailed);
         }
 
         /**
@@ -290,7 +321,6 @@ angular.module('home')
             vm.data = [[],[]];
 
             Array.prototype.forEach.call(data.stats, value => {
-
                 // Push the date representing the week in DD/MM/YYYY format
                 var date = new Date(value[0] * 1000);
                 vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
@@ -314,6 +344,16 @@ angular.module('home')
          */
         function displayHistory(document) {
             vm.history.push({ _id: document._id, date: document.date, repo: document.repo });
+        }
+
+        /**
+         * Store the requested github stats in the vm.trends variable.
+         * Angular will manage to display it for the user.
+         * @param document is the requested github stats to store. It has
+         * a JSON format.
+         */
+        function displayTrend(document) {
+            vm.trends.push({ repo: document._id, count: document.count });
         }
 
         /**
@@ -345,7 +385,7 @@ angular.module('home')
                         id: 'y-axis-1',
                         type: 'linear',
                         display: true,
-                        position: 'left',
+                        position: 'left'
                     },
                     {
                         id: 'y-axis-2',
@@ -409,18 +449,18 @@ angular.module('home')
     angular
         .module('explorer')
         .factory('historyservice', historyservice)
+        .factory('trendsservice', trendsservice)
         .factory('githubstatsservice', githubstatsservice)
         .factory('storedstatsservice', storedstatsservice)
         .factory('reposservice', reposservice);
-        // Inject your dependencies as .$inject = ['$http', 'someSevide'];
-        // function Name ($http, someSevide) {...}
 
         historyservice.$inject = ['$http'];
+        trendsservice.$inject = ['$http'];
         githubstatsservice.$inject = ['$http'];
         storedstatsservice.$inject = ['$http'];
         reposservice.$inject = ['$http'];
 
-        function historyservice ($http) {
+        function historyservice($http) {
             return {
                 getRequestsHistory: getRequestsHistory
             };
@@ -441,13 +481,34 @@ angular.module('home')
             }
         }
 
+        function trendsservice($http) {
+            return {
+                getTrends: getTrends
+            };
+
+            function getTrends() {
+                return $http.get('/api/trends')
+                    .then(getTrendsComplete)
+                    .catch(getTrendsFailed);
+
+                function getTrendsComplete(response) {
+                    return response.data;
+                }
+
+                function getTrendsFailed(error) {
+                    console.log('Failed requesting trends.' + error.data);
+                    throw error;
+                }
+            }
+        }
+
         function githubstatsservice ($http) {
             return {
                 getGithubStats: getGithubStats
             };
 
-            function getGithubStats(username, repo) {
-                return $http.get('/api/githubstats/' + username + '/' + repo)
+            function getGithubStats(repo) {
+                return $http.get('/api/githubstats/' + repo)
                     .then(getGithubStatsComplete)
                     .catch(getGithubStatsFailed);
 
@@ -456,7 +517,7 @@ angular.module('home')
                 }
 
                 function getGithubStatsFailed(error) {
-                    console.log("Failed getting github stats for "+username+"/"+repo);
+                    console.log("Failed getting github stats for " + repo);
                     throw error;
                 }
             }

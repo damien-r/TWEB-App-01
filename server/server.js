@@ -150,7 +150,7 @@ app.get('/api/repos/:username', function (req, res, next) {
 
     fetchGithubData(context)
         .then(function (result) {
-            res.json(result.trends);
+            res.json(result.data);
         })
         .catch(function (error) {
             next(error);
@@ -302,7 +302,8 @@ function fetchGithubData(context) {
         .catch(function (error){
             console.log("An error occured when trying to fetch github data");
             console.log(error);
-            closeDBConnection(context);
+            context.data = {};
+            return context;
         });
 }
 

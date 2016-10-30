@@ -1,5 +1,5 @@
 /*!
-* github-explorer - v0.0.1 - MIT LICENSE 2016-10-29. 
+* github-explorer - v0.0.1 - MIT LICENSE 2016-10-30. 
 * @author Les courgettes
 */
 /**

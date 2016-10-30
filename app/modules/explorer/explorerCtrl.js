@@ -43,7 +43,8 @@
         vm.repoName = undefined;
         vm.repoNameError = undefined;
         vm.responseCallback = undefined;
-        vm.watchStats = watchStatsFromGithub; // Function call on user event
+        vm.watchStats = watchStatsFromGithubByUserAndRepo; // Function call on user event
+        vm.watchStatsFromTrends = watchStatsFromGithub; // Function call on user event
         vm.displayStatsFromDB = displayStatsFromDB; // Function call on user event
         vm.history = [];
         vm.repos = [];
@@ -68,9 +69,9 @@
             return historyservice
                 .getRequestsHistory()
                 .then(function(data) {
-                    for(var value in data) {
+                    Array.prototype.forEach.call(data, value => {
                         displayHistory(value);
-                    }
+                    });
                 })
                 .catch(function(error){
                     gettingStatsFailed(error);
@@ -93,9 +94,9 @@
                 reposservice.getRepos(username)
                     .then(function(data) {
                         vm.repos = [];
-                        for(var repo in data) {
+                        Array.prototype.forEach.call(data, repo => {
                             vm.repos.push(repo.name);
-                        }
+                        });
                     })
                     .catch(function(error){
                         displayError(error);
@@ -106,8 +107,10 @@
         /**
          * This function call a service to retrieve data from Github API
          * for the given repository.
+         * @param repo is the github user.
+         * @param repo is the github repo associated to the user.
          */
-        function watchStatsFromGithub() {
+        function watchStatsFromGithubByUserAndRepo(user, repo) {
 
             // Check if the fields are filled
             var error = false;
@@ -127,13 +130,7 @@
                 vm.errorMessage = undefined;
 
                 // Call of our service to get github data
-                githubstatsservice.getGithubStats(vm.userName + '/' + vm.repoName)
-                    .then(displayStats)
-                    .then(displayHistory)
-                    .catch(gettingStatsFailed);
-
-                getTrends();
-                getRequestsHistory();
+                watchStatsFromGithub(user + '/' + repo);
             }
             else {
                 // Empty the graph if an error has occurred.
@@ -142,6 +139,20 @@
                 vm.labels = [];
                 vm.data = [[],[]];
             }
+        }
+
+        /**
+         * This function call a service to retrieve data from Github API
+         * for the given repository.
+         * @param repo is the github repo.
+         */
+        function watchStatsFromGithub(repo) {
+            githubstatsservice.getGithubStats(repo)
+                .then(displayStats)
+                .then(displayHistory)
+                .then(getTrends)
+                .then(getRequestsHistory)
+                .catch(gettingStatsFailed);
         }
 
         /**
