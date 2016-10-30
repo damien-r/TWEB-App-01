@@ -62,9 +62,12 @@
             return historyservice
                 .getRequestsHistory()
                 .then(function(data) {
-                    Array.prototype.forEach.call(data, value => {
+                    for(var value in data) {
                         displayHistory(value);
-                    });
+                    }
+                })
+                .catch(function(error){
+                    displayError(error);
                 });
         }
 
@@ -73,12 +76,12 @@
                 reposservice.getRepos(username)
                     .then(function(data) {
                         vm.repos = [];
-                        Array.prototype.forEach.call(data, repo => {
+                        for(var repo in data) {
                             vm.repos.push(repo.name);
-                        });
+                        }
                     })
                     .catch(function(error){
-                        console.log(error);
+                        displayError(error);
                     });
             }
         }
@@ -108,12 +111,13 @@
                 // No error at this stage, Let's try to get github data
                 vm.userNameError = vm.repoNameError = undefined;
                 vm.responseCallback = undefined;
+                vm.errorMessage = undefined;
 
                 // Call of our service to get github data
                 githubstatsservice.getGithubStats(username, repo)
                     .then(displayStats)
                     .then(displayHistory)
-                    .catch(gettingStatsFailed);
+                    .catch(displayError);
             }
             else {
                 // Empty the graph if an error has occurred.
@@ -133,7 +137,7 @@
             storedstatsservice
                 .getStoredStats(id)
                 .then(displayStats)
-                .catch(gettingStatsFailed);
+                .catch(displayError);
         }
 
         /**
@@ -151,8 +155,7 @@
             vm.labels = [];
             vm.data = [[],[]];
 
-            Array.prototype.forEach.call(data.stats, value => {
-
+            for(var value in data.stats) {
                 // Push the date representing the week in DD/MM/YYYY format
                 var date = new Date(value[0] * 1000);
                 vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
@@ -163,7 +166,7 @@
                 // Push Deletions.
                 // Math.abs() is for having positive values on the graph
                 vm.data[1].push(Math.abs(value[2]));
-            });
+            }
 
             return data;
         }
@@ -185,13 +188,12 @@
          * is not valid (it doesn't exist).
          * @param error is the error to display
          */
-        function gettingStatsFailed(error) {
-            console.log("gettingStatsFailed");
-            console.log(error);
+        function displayError(error) {
+            console.log("Displaying error....");
             vm.labels = [];
             vm.data = [[],[]];
-            vm.responseCallback = "error " + error.status + " " + error.statusText +
-                " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
+            vm.responseCallback = "Error " + error.status + " : " + error.statusText +
+                " for " + vm.userName + "/" + vm.repoName + " repository.";
         }
 
         // Configurations for managing the graph
@@ -207,7 +209,7 @@
                         id: 'y-axis-1',
                         type: 'linear',
                         display: true,
-                        position: 'left',
+                        position: 'left'
                     },
                     {
                         id: 'y-axis-2',

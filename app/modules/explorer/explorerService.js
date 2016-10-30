@@ -15,8 +15,6 @@
         .factory('githubstatsservice', githubstatsservice)
         .factory('storedstatsservice', storedstatsservice)
         .factory('reposservice', reposservice);
-        // Inject your dependencies as .$inject = ['$http', 'someSevide'];
-        // function Name ($http, someSevide) {...}
 
         historyservice.$inject = ['$http'];
         githubstatsservice.$inject = ['$http'];

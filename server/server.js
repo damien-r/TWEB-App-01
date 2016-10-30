@@ -31,7 +31,7 @@ if (MONGODB_URI === undefined) {
     process.exit(1);
 }
 
-const GITHUB_API = "https://api.github.com"
+const GITHUB_API = "https://api.github.com";
 
 /**
  *******************************************************
@@ -51,8 +51,6 @@ app.listen(app.get('port'), function() {
  * server REST API
  *******************************************************
  */
-// test séparation composants
-// app.use('/api', require('./routes'));
 
 // Get history of the last requests made by a specific ip user
 app.get('/api/history', function (req, res, next) {
@@ -100,8 +98,6 @@ app.get('/api/githubstats/:_id', function (req, res, next) {
 // Get github statistics from github API for a given username and repo
 app.get('/api/githubstats/:username/:repo', function (req, res, next) {
 
-    console.log(req.params.username + '/' + req.params.repo);
-
     var context = {};
     context.ip_user = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     context.date = new Date();
@@ -117,13 +113,12 @@ app.get('/api/githubstats/:username/:repo', function (req, res, next) {
         headers: {
             'User-Agent': GITHUB_USER_AGENT
         },
-        json: true
+        json: true,
+        resolveWithFullResponse: true
     };
 
     fetchAndSaveGithubStats(context)
         .then(function (result) {
-            console.log("We are done:");
-            console.log(result.data);
             // Send Github stats
             var dataToSend = {};
             dataToSend._id = result._id;
@@ -149,7 +144,8 @@ app.get('/api/repos/:username', function (req, res, next) {
         headers: {
             'User-Agent': GITHUB_USER_AGENT
         },
-        json: true
+        json: true,
+        resolveWithFullResponse: true
     };
 
     fetchGithubData(context)
@@ -167,12 +163,19 @@ app.get('/api/repos/:username', function (req, res, next) {
  *******************************************************
  */
 
+/**
+ * Chain of promises to get history from data stored in mongoDB
+ */
 function getHistory(context) {
+    console.log("Getting history of ip " + context.ip_user);
     return openDBConnection(context)
         .then(fetchHistory)
         .then(closeDBConnection);
 }
 
+/**
+ * Construct history from data stored in mongoDB
+ */
 function fetchHistory(context) {
     console.log("Fetching history from DB...");
     var collection = context.db.collection("githubstats");
@@ -188,12 +191,18 @@ function fetchHistory(context) {
         });
 }
 
+/**
+ * Chain of promises to get github statistics
+ */
 function getGithubStats(context) {
     return openDBConnection(context)
         .then(getStatFromDB)
         .then(closeDBConnection);
 }
 
+/**
+ * Get github statistics stored in mongoDB
+ */
 function getStatFromDB(context) {
     console.log("Getting stats from DB...");
     var collection = context.db.collection("githubstats");
@@ -208,6 +217,9 @@ function getStatFromDB(context) {
         })
 }
 
+/**
+ * Chain of promises to fetch and save github data in mongoDB
+ */
 function fetchAndSaveGithubStats(context) {
     return openDBConnection(context)
         .then(fetchGithubData)
@@ -215,6 +227,9 @@ function fetchAndSaveGithubStats(context) {
         .then(closeDBConnection);
 }
 
+/**
+ * Open mongoDB connection
+ */
 function openDBConnection(context) {
     console.log("Open DB connection...");
     return MongoClient.connect(context.db_url)
@@ -222,23 +237,62 @@ function openDBConnection(context) {
             console.log("DB connection opened.");
             context.db = db;
             return context;
+        })
+        .catch(function(error){
+            console.log("Error when trying to open DB connection");
+            console.log(error);
         });
 }
 
+/**
+ * Retrieve github data using github API and the request-promise module
+ */
 function fetchGithubData(context) {
     console.log("Fetching github data...");
     return rp(context.options)
         .then(function (data){
-            console.log("Github data fetched.");
-            // TODO : de temps a autre la reponse "bug"
-            // 'data' est juste un élément de type Object qui ne contient rien...
-            // Est-ce l'API github qui fonctionne mal ? ou le plugin 'request-promise' ?
-            console.log("------------------------------------after rp: " + data);
-            context.data = data;
-            return context;
+            // FROM GITHUB : A WORD ABOUT CACHE
+            // https://developer.github.com/v3/repos/statistics/#a-word-about-caching
+            //
+            // Computing repository statistics is an expensive operation,
+            // so we try to return cached data whenever possible.
+            // If the data hasn't been cached when you query a repository's statistics,
+            // you'll receive a 202 response; a background job is also fired to
+            // start compiling these statistics. Give the job a few moments
+            // to complete, and then submit the request again.
+            // If the job has completed, that request will receive a 200 response
+            // with the statistics in the response body.
+            //
+            // Repository statistics are cached by the SHA of the repository's
+            // default branch, which is usually master;
+            // pushing to the default branch resets the statistics cache.
+
+            // In conclusion, we have to check the status code of the answer.
+            // If it's a 202, we wait a short time for github to cache the results
+            // and then request again for the same data.
+            // We do that until we get the the proper 200 statusCode.
+            if (data.statusCode == 202) {
+                console.log("data status code = " + data.statusCode);
+                setTimeout(function() {
+                    console.log("waiting a short time...");
+                }, 50);
+                return fetchGithubData(context);
+            } else {
+                console.log("Github data fetched.");
+                context.data = data.body;
+                return context;
+            }
+        })
+        .catch(function (error){
+            console.log("An error occured when trying to fetch github data");
+            console.log(error);
+            closeDBConnection(context);
         });
 }
 
+/**
+ * Save github data in mongoDB
+ */
 function saveGithubStats(context) {
     console.log("Saving github data...");
     var collection = context.db.collection("githubstats");
@@ -253,9 +307,16 @@ function saveGithubStats(context) {
             console.log("Github data saved.");
             context._id = results.insertedId;
             return context;
+        })
+        .catch(function(error){
+            console.log("An error occured when trying to save data.");
+            console.log(error);
         });
 }
 
+/**
+ * Close mongoDB connection
+ */
 function closeDBConnection(context) {
     console.log("Closing DB connection...");
     return context.db.close()
