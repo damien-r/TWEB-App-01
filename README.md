@@ -15,3 +15,6 @@ Open [http://github-explorer.herokuapp.com](http://github-explorer.herokuapp.com
 ## Run MongoDB with Docker
 - Server : `docker run -p 27017:27017 mongo:latest`
 - Client : `docker run -it mongo:latest mongo --host 192.168.99.100`
+
+## Authors
+Damien Rochat & Sébastien Richoz (HEIG-VD 2016)
