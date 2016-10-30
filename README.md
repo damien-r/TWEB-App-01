@@ -11,3 +11,7 @@
 ## Check the app on the web
 The Landing page is [here](https://damienrochat.github.io/TWEB-App-01/)
 Open [http://github-explorer.herokuapp.com](http://github-explorer.herokuapp.com)
+
+## Run MongoDB with Docker
+- Server : `docker run -p 27017:27017 mongo:latest`
+- Client : `docker run -it mongo:latest mongo --host 192.168.99.100`

@@ -12,7 +12,7 @@
         .module('explorer')
         .controller('ExplorerCtrl', Explorer);
 
-    Explorer.$inject = ['historyservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
+    Explorer.$inject = ['historyservice', 'trendsservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
 
     /*
     * recommend
@@ -20,6 +20,7 @@
     * and bindable members up top.
     */
     function Explorer(historyservice,
+                        trendsservice,
                         githubstatsservice,
                         storedstatsservice,
                         reposservice) {
@@ -46,6 +47,7 @@
         vm.displayStatsFromDB = displayStatsFromDB; // Function call on user event
         vm.history = [];
         vm.repos = [];
+        vm.trends = [];
         vm.getRepos = getReposFromUser;
         vm.emptyRepos = function () { vm.repos = []; };
 
@@ -56,9 +58,13 @@
             getRequestsHistory().then(function() {
                 console.log("Activated history view");
             });
+            getTrends().then(function() {
+                console.log("Activated trends view");
+            });
         }
 
         function getRequestsHistory() {
+            vm.history = [];
             return historyservice
                 .getRequestsHistory()
                 .then(function(data) {
@@ -67,7 +73,18 @@
                     }
                 })
                 .catch(function(error){
-                    displayError(error);
+                    gettingStatsFailed(error);
+                });
+        }
+
+        function getTrends() {
+            vm.trends = [];
+            return trendsservice
+                .getTrends()
+                .then(function(data) {
+                    Array.prototype.forEach.call(data, value => {
+                        displayTrend(value);
+                    });
                 });
         }
 
@@ -88,22 +105,18 @@
 
         /**
          * This function call a service to retrieve data from Github API
-         * for the given username and repository. It has a chain of promises
-         * to display it and catch eventually errors
-         * @param username is the github username provided by the user
-         * @param repo is the github repo associated to the username. Also
-         * provided by the user
+         * for the given repository.
          */
-        function watchStatsFromGithub(username, repo) {
+        function watchStatsFromGithub() {
 
             // Check if the fields are filled
             var error = false;
-            if (!username) {
-                vm.userNameError = "You must provide a github username";
+            if (!vm.userName) {
+                vm.userNameError = "You must provide a github user";
                 error = true;
             }
-            if (!repo) {
-                vm.repoNameError = "You must provide a github repository name";
+            if (!vm.repoName) {
+                vm.repoNameError = "You must provide a github repository";
                 error = true;
             }
 
@@ -114,10 +127,13 @@
                 vm.errorMessage = undefined;
 
                 // Call of our service to get github data
-                githubstatsservice.getGithubStats(username, repo)
+                githubstatsservice.getGithubStats(vm.userName + '/' + vm.repoName)
                     .then(displayStats)
                     .then(displayHistory)
-                    .catch(displayError);
+                    .catch(gettingStatsFailed);
+
+                getTrends();
+                getRequestsHistory();
             }
             else {
                 // Empty the graph if an error has occurred.
@@ -137,7 +153,7 @@
             storedstatsservice
                 .getStoredStats(id)
                 .then(displayStats)
-                .catch(displayError);
+                .catch(gettingStatsFailed);
         }
 
         /**
@@ -155,7 +171,7 @@
             vm.labels = [];
             vm.data = [[],[]];
 
-            for(var value in data.stats) {
+            Array.prototype.forEach.call(data.stats, value => {
                 // Push the date representing the week in DD/MM/YYYY format
                 var date = new Date(value[0] * 1000);
                 vm.labels.push(date.getDate() + '.' + (date.getMonth() + 1) + '.' + (date.getFullYear()));
@@ -166,7 +182,7 @@
                 // Push Deletions.
                 // Math.abs() is for having positive values on the graph
                 vm.data[1].push(Math.abs(value[2]));
-            }
+            });
 
             return data;
         }
@@ -182,18 +198,29 @@
         }
 
         /**
+         * Store the requested github stats in the vm.trends variable.
+         * Angular will manage to display it for the user.
+         * @param document is the requested github stats to store. It has
+         * a JSON format.
+         */
+        function displayTrend(document) {
+            vm.trends.push({ repo: document._id, count: document.count });
+        }
+
+        /**
          * This function is called when an error occurred during the fetch
          * github stats' process.
          * The most common error is that the repository the user requested
          * is not valid (it doesn't exist).
          * @param error is the error to display
          */
-        function displayError(error) {
-            console.log("Displaying error....");
+        function gettingStatsFailed(error) {
+            console.log("gettingStatsFailed");
+            console.log(error);
             vm.labels = [];
             vm.data = [[],[]];
-            vm.responseCallback = "Error " + error.status + " : " + error.statusText +
-                " for " + vm.userName + "/" + vm.repoName + " repository.";
+            vm.responseCallback = "error " + error.status + " " + error.statusText +
+                " : " + vm.userName + "/" + vm.repoName + " is not a valid repository.";
         }
 
         // Configurations for managing the graph

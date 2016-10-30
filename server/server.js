@@ -58,7 +58,7 @@ app.get('/api/history', function (req, res, next) {
     var context = {};
     // Get ip from user
     context.ip_user = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    context.db_url = MONGODB_URI;
+    context.db_uri = MONGODB_URI;
 
     console.log("ip user: " + context.ip_user);
     getHistory(context)
@@ -78,7 +78,7 @@ app.get('/api/history', function (req, res, next) {
 app.get('/api/githubstats/:_id', function (req, res, next) {
     var context = {};
     context._id = req.params._id;
-    context.db_url = MONGODB_URI;
+    context.db_uri = MONGODB_URI;
 
     getGithubStats(context)
         .then(function (result){
@@ -102,7 +102,7 @@ app.get('/api/githubstats/:username/:repo', function (req, res, next) {
     context.ip_user = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     context.date = new Date();
     context.repo = req.params.username + "/" + req.params.repo;
-    context.db_url = MONGODB_URI;
+    context.db_uri = MONGODB_URI;
 
     // Used for Github API
     context.options = {
@@ -150,11 +150,27 @@ app.get('/api/repos/:username', function (req, res, next) {
 
     fetchGithubData(context)
         .then(function (result) {
-            res.json(result.data);
+            res.json(result.trends);
         })
         .catch(function (error) {
             next(error);
+        });
+});
+
+app.get('/api/trends', function(req, res, next) {
+    console.log("\n## Get trends");
+
+    var context = {
+        db_uri: MONGODB_URI
+    };
+
+    getTrends(context)
+        .then(function(context) {
+            res.json(context.trends);
         })
+        .catch(function(error) {
+            next(error);
+        });
 });
 
 /**
@@ -232,7 +248,7 @@ function fetchAndSaveGithubStats(context) {
  */
 function openDBConnection(context) {
     console.log("Open DB connection...");
-    return MongoClient.connect(context.db_url)
+    return MongoClient.connect(context.db_uri)
         .then(function (db) {
             console.log("DB connection opened.");
             context.db = db;
@@ -323,5 +339,29 @@ function closeDBConnection(context) {
         .then(function() {
             console.log("DB connection closed.");
             return context;
+        });
+}
+
+function getTrends(context) {
+    return openDBConnection(context)
+        .then(fetchTrends)
+        .then(closeDBConnection);
+}
+
+function fetchTrends(context) {
+    console.log("Fetching trends from DB...");
+
+    var collection = context.db.collection("githubstats");
+    return collection
+        .aggregate([{ "$group": { _id: "$repo", count: { $sum: 1 } } }])
+        .sort({ count: -1 })
+        .limit(7)
+        .toArray()
+        .then(function(documents) {
+            context.trends = documents;
+            return context;
+        })
+        .catch(function(error) {
+            console.log(error);
         });
 }
