@@ -12,6 +12,7 @@
     angular
         .module('explorer')
         .factory('historyservice', historyservice)
+        .factory('trendsservice', trendsservice)
         .factory('githubstatsservice', githubstatsservice)
         .factory('storedstatsservice', storedstatsservice)
         .factory('reposservice', reposservice);
@@ -19,11 +20,12 @@
         // function Name ($http, someSevide) {...}
 
         historyservice.$inject = ['$http'];
+        trendsservice.$inject = ['$http'];
         githubstatsservice.$inject = ['$http'];
         storedstatsservice.$inject = ['$http'];
         reposservice.$inject = ['$http'];
 
-        function historyservice ($http) {
+        function historyservice($http) {
             return {
                 getRequestsHistory: getRequestsHistory
             };
@@ -44,13 +46,34 @@
             }
         }
 
+        function trendsservice($http) {
+            return {
+                getTrends: getTrends
+            };
+
+            function getTrends() {
+                return $http.get('/api/trends')
+                    .then(getTrendsComplete)
+                    .catch(getTrendsFailed);
+
+                function getTrendsComplete(response) {
+                    return response.data;
+                }
+
+                function getTrendsFailed(error) {
+                    console.log('Failed requesting trends.' + error.data);
+                    throw error;
+                }
+            }
+        }
+
         function githubstatsservice ($http) {
             return {
                 getGithubStats: getGithubStats
             };
 
-            function getGithubStats(username, repo) {
-                return $http.get('/api/githubstats/' + username + '/' + repo)
+            function getGithubStats(repo) {
+                return $http.get('/api/githubstats/' + repo)
                     .then(getGithubStatsComplete)
                     .catch(getGithubStatsFailed);
 
@@ -59,7 +82,7 @@
                 }
 
                 function getGithubStatsFailed(error) {
-                    console.log("Failed getting github stats for "+username+"/"+repo);
+                    console.log("Failed getting github stats for " + repo);
                     throw error;
                 }
             }

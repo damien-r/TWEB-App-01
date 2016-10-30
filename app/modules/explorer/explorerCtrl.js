@@ -12,7 +12,7 @@
         .module('explorer')
         .controller('ExplorerCtrl', Explorer);
 
-    Explorer.$inject = ['historyservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
+    Explorer.$inject = ['historyservice', 'trendsservice', 'githubstatsservice', 'storedstatsservice', 'reposservice'];
 
     /*
     * recommend
@@ -20,6 +20,7 @@
     * and bindable members up top.
     */
     function Explorer(historyservice,
+                        trendsservice,
                         githubstatsservice,
                         storedstatsservice,
                         reposservice) {
@@ -46,6 +47,7 @@
         vm.displayStatsFromDB = displayStatsFromDB; // Function call on user event
         vm.history = [];
         vm.repos = [];
+        vm.trends = [];
         vm.getRepos = getReposFromUser;
         vm.emptyRepos = function () { vm.repos = []; };
 
@@ -56,14 +58,29 @@
             getRequestsHistory().then(function() {
                 console.log("Activated history view");
             });
+            getTrends().then(function() {
+                console.log("Activated trends view");
+            });
         }
 
         function getRequestsHistory() {
+            vm.history = [];
             return historyservice
                 .getRequestsHistory()
                 .then(function(data) {
                     Array.prototype.forEach.call(data, value => {
                         displayHistory(value);
+                    });
+                });
+        }
+
+        function getTrends() {
+            vm.trends = [];
+            return trendsservice
+                .getTrends()
+                .then(function(data) {
+                    Array.prototype.forEach.call(data, value => {
+                        displayTrend(value);
                     });
                 });
         }
@@ -85,22 +102,18 @@
 
         /**
          * This function call a service to retrieve data from Github API
-         * for the given username and repository. It has a chain of promises
-         * to display it and catch eventually errors
-         * @param username is the github username provided by the user
-         * @param repo is the github repo associated to the username. Also
-         * provided by the user
+         * for the given repository.
          */
-        function watchStatsFromGithub(username, repo) {
+        function watchStatsFromGithub() {
 
             // Check if the fields are filled
             var error = false;
-            if (!username) {
-                vm.userNameError = "You must provide a github username";
+            if (!vm.userName) {
+                vm.userNameError = "You must provide a github user";
                 error = true;
             }
-            if (!repo) {
-                vm.repoNameError = "You must provide a github repository name";
+            if (!vm.repoName) {
+                vm.repoNameError = "You must provide a github repository";
                 error = true;
             }
 
@@ -110,10 +123,13 @@
                 vm.responseCallback = undefined;
 
                 // Call of our service to get github data
-                githubstatsservice.getGithubStats(username, repo)
+                githubstatsservice.getGithubStats(vm.userName + '/' + vm.repoName)
                     .then(displayStats)
                     .then(displayHistory)
                     .catch(gettingStatsFailed);
+
+                getTrends();
+                getRequestsHistory();
             }
             else {
                 // Empty the graph if an error has occurred.
@@ -179,6 +195,16 @@
         }
 
         /**
+         * Store the requested github stats in the vm.trends variable.
+         * Angular will manage to display it for the user.
+         * @param document is the requested github stats to store. It has
+         * a JSON format.
+         */
+        function displayTrend(document) {
+            vm.trends.push({ repo: document._id, count: document.count });
+        }
+
+        /**
          * This function is called when an error occurred during the fetch
          * github stats' process.
          * The most common error is that the repository the user requested
@@ -207,7 +233,7 @@
                         id: 'y-axis-1',
                         type: 'linear',
                         display: true,
-                        position: 'left',
+                        position: 'left'
                     },
                     {
                         id: 'y-axis-2',

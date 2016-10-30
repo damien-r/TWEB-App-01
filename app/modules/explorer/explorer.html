@@ -8,12 +8,12 @@
 
 <section class="wrapper style4 special container">
     <div class="row">
-        <div class="6u 12u(narrower)">
+        <div class="12u">
             <section>
                 <header>
                     <h3>Provide the data</h3>
                 </header>
-                <form ng-submit="vm.watchStats(vm.userName, vm.repoName)" >
+                <form ng-submit="vm.watchStats()" >
                     <div class="row 50%">
                         <div class="6u 12u(mobile)">
                             <input type="text" ng-model="vm.userName" bg-focus="vm.emptyRepos()" ng-blur="vm.getRepos(vm.userName)" name="username" placeholder="Github username" />
@@ -38,6 +38,19 @@
             </section>
 
         </div>
+    </div>
+
+
+    <div class="row">
+        <br>
+        <p><strong>{{ vm.responseCallback }}</strong></p>
+        <canvas id="line" class="chart chart-line" chart-data="vm.data"
+                chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
+                chart-click="vm.onClick" chart-colors="vm.colors">
+        </canvas>
+    </div>
+
+    <div class="row">
         <div class="6u 12u(narrower)">
 
             <section>
@@ -62,15 +75,29 @@
             </section>
 
         </div>
+        <div class="6u 12u(narrower)">
+
+            <section>
+                <header>
+                    <h3>Trends</h3>
+                </header>
+                <ul class="small-font">
+                    <li ng-repeat="entry in vm.trends">
+                        #{{$index + 1}}
+                        <a href="" ng-click="vm.watchStats(entry.repo)">
+                            {{entry.repo}}
+                        </a>
+                        ({{entry.count}} searches)
+                    </li>
+                </ul>
+                <!--
+                <select>
+                    <option value="volvo">No queries for now</option>
+                </select>
+                -->
+            </section>
+
+        </div>
     </div>
 
-
-    <div class="row">
-        <br>
-        <p><strong>{{ vm.responseCallback }}</strong></p>
-        <canvas id="line" class="chart chart-line" chart-data="vm.data"
-                chart-labels="vm.labels" chart-series="vm.series" chart-options="vm.options"
-                chart-click="vm.onClick" chart-colors="vm.colors">
-        </canvas>
-    </div>
 </section>
